@@ -23,6 +23,15 @@ if ($id < 1 && $pid < 1)
 // Load the viewtopic.php language file
 require PUN_ROOT.'lang/'.$pun_user['language'].'/topic.php';
 
+if (file_exists(PUN_ROOT.'lang/'.$pun_user['language'].'/thanks.php'))
+	require PUN_ROOT.'lang/'.$pun_user['language'].'/thanks.php';
+else
+	require PUN_ROOT.'lang/English/thanks.php';
+	
+if (file_exists(PUN_ROOT.'lang/'.$pun_user['language'].'/thanks2.php'))
+	require PUN_ROOT.'lang/'.$pun_user['language'].'/thanks2.php';
+else
+	require PUN_ROOT.'lang/English/thanks2.php';
 
 // If a post ID is specified we determine topic ID and page number so we can redirect to the correct message
 if ($pid)
@@ -162,13 +171,7 @@ if ($pun_config['o_quickpost'] == '1' &&
 	// Load the post.php language file
 	require PUN_ROOT.'lang/'.$pun_user['language'].'/post.php';
 
-	$required_fields = array('req_message' => $lang_common['Message']);
-	if ($pun_user['is_guest'])
-	{
-		$required_fields['req_username'] = $lang_post['Guest name'];
-		if ($pun_config['p_force_guest_email'] == '1')
-			$required_fields['req_email'] = $lang_common['Email'];
-	}
+	$required_fields = array('req_email' => $lang_common['Email'], 'req_message' => $lang_common['Message']);
 	$quickpost = true;
 }
 
@@ -195,18 +198,27 @@ require PUN_ROOT.'header.php';
 
 ?>
 <div class="linkst">
-	<div class="inbox crumbsplus">
-		<ul class="crumbs">
-			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
-			<li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
-		</ul>
-		<div class="pagepost">
-			<p class="pagelink conl"><?php echo $paging_links ?></p>
-<?php echo $post_link ?>
-		</div>
-		<div class="clearer"></div>
-	</div>
+ <div class="inbox crumbsplus">
+  <ul class="crumbs">
+   <li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
+   <li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
+   <li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
+  </ul>
+  <div class="pagepost">
+    <p class="pagelink conl"><?php echo $paging_links ?></p>
+    <?php echo $post_link ?>
+<!-- AddToAny BEGIN -->
+<p class="a2a_kit a2a_default_style">
+<a class="a2a_dd" href="http://www.addtoany.com/share_save">シェア</a>
+<span class="a2a_divider"></span>
+<a class="a2a_button_facebook"></a>
+<a class="a2a_button_twitter"></a>
+</p>
+<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+<!-- AddToAny END -->
+   </div>
+  <div class="clearer"></div>
+ </div>
 </div>
 
 <?php
@@ -227,7 +239,7 @@ if (empty($post_ids))
 	error('The post table and topic table seem to be out of sync!', __FILE__, __LINE__);
 
 // Retrieve the posts (and their respective poster/online status)
-$result = $db->query('SELECT u.email, u.title, u.url, u.location, u.signature, u.email_setting, u.num_posts, u.registered, u.admin_note, p.id, p.poster AS username, p.poster_id, p.poster_ip, p.poster_email, p.message, p.hide_smilies, p.posted, p.edited, p.edited_by, g.g_id, g.g_user_title, o.user_id AS is_online FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'users AS u ON u.id=p.poster_id INNER JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id LEFT JOIN '.$db->prefix.'online AS o ON (o.user_id=u.id AND o.user_id!=1 AND o.idle=0) WHERE p.id IN ('.implode(',', $post_ids).') ORDER BY p.id', true) or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
+$result = $db->query('SELECT u.email, u.title, u.url, u.location, u.signature, u.email_setting, u.use_pm, u.num_posts, u.registered, u.admin_note, p.id, p.poster AS username, p.poster_id, p.poster_ip, p.poster_email, p.message, p.hide_smilies, p.posted, p.edited, p.edited_by, g.g_id, g.g_user_title, o.user_id AS is_online FROM '.$db->prefix.'posts AS p INNER JOIN '.$db->prefix.'users AS u ON u.id=p.poster_id INNER JOIN '.$db->prefix.'groups AS g ON g.g_id=u.group_id LEFT JOIN '.$db->prefix.'online AS o ON (o.user_id=u.id AND o.user_id!=1 AND o.idle=0) WHERE p.id IN ('.implode(',', $post_ids).') ORDER BY p.id', true) or error('Unable to fetch post info', __FILE__, __LINE__, $db->error());
 while ($cur_post = $db->fetch_assoc($result))
 {
 	$post_count++;
@@ -237,6 +249,31 @@ while ($cur_post = $db->fetch_assoc($result))
 	$post_actions = array();
 	$is_online = '';
 	$signature = '';
+
+$users_thanks = array();
+	
+	$result_thanks = $db->query('SELECT thanks_by, thanks_by_id FROM '.$db->prefix.'thanks WHERE post_id='.$cur_post['id']) or error('Unable to fetch thanks info', __FILE__, __LINE__, $db->error());
+	while ($thanks = $db->fetch_assoc($result_thanks))
+	{
+		if ($pun_user['g_view_users'] == '1' && $thanks['thanks_by_id'] > 1)
+			$users_thanks[] = '<a href="profile.php?id='.$thanks['thanks_by_id'].'">'.pun_htmlspecialchars($thanks['thanks_by']).'</a>';
+		else
+			$users_thanks[] = pun_htmlspecialchars($thanks['thanks_by']);
+	}
+	$num_thanks = count($users_thanks);
+	
+$users_thanks2 = array();
+	
+	$result_thanks2 = $db->query('SELECT thanks_by, thanks_by_id FROM '.$db->prefix.'thanks2 WHERE post_id='.$cur_post['id']) or error('Unable to fetch thanks info', __FILE__, __LINE__, $db->error());
+	while ($thanks2 = $db->fetch_assoc($result_thanks2))
+	{
+		if ($pun_user['g_view_users'] == '1' && $thanks2['thanks_by_id'] > 1)
+			$users_thanks2[] = '<a href="profile.php?id='.$thanks2['thanks_by_id'].'">'.pun_htmlspecialchars($thanks2['thanks_by']).'</a>';
+		else
+			$users_thanks2[] = pun_htmlspecialchars($thanks2['thanks_by']);
+	}
+	$num_thanks2 = count($users_thanks2);
+
 
 	// If the poster is a registered user
 	if ($cur_post['poster_id'] > 1)
@@ -283,6 +320,12 @@ while ($cur_post = $db->fetch_assoc($result))
 				$user_contacts[] = '<span class="email"><a href="mailto:'.$cur_post['email'].'">'.$lang_common['Email'].'</a></span>';
 			else if ($cur_post['email_setting'] == '1' && !$pun_user['is_guest'] && $pun_user['g_send_email'] == '1')
 				$user_contacts[] = '<span class="email"><a href="misc.php?email='.$cur_post['poster_id'].'">'.$lang_common['Email'].'</a></span>';
+
+			if ($pun_config['o_pms_enabled'] == '1' && !$pun_user['is_guest'] && $pun_user['g_pm'] == '1' && $pun_user['use_pm'] == '1' && $cur_post['use_pm'] == '1')
+			{
+				$pid = isset($cur_post['poster_id']) ? $cur_post['poster_id'] : $cur_post['id'];
+				$user_contacts[] = '<span class="email"><a href="pms_send.php?uid='.$pid.'">'.$lang_pms['PM'].'</a></span>';
+			}
 
 			if ($cur_post['url'] != '')
 			{
@@ -332,6 +375,14 @@ while ($cur_post = $db->fetch_assoc($result))
 
 			if (($cur_topic['post_replies'] == '' && $pun_user['g_post_replies'] == '1') || $cur_topic['post_replies'] == '1')
 				$post_actions[] = '<li class="postquote"><span><a href="post.php?tid='.$id.'&amp;qid='.$cur_post['id'].'">'.$lang_topic['Quote'].'</a></span></li>';
+
+                        if (($cur_topic['post_replies'] == '' && $pun_user['g_can_thanks'] == '1'))
+				$post_actions[] = '<li class="postthanks2"><span><a href="thanks2.php?tid='.$id.'&amp;pid='.$cur_post['id'].'">'.$lang_thanks2['Say Thanks'].'</a></span></li>';
+			
+                        /*	
+                        if (($cur_topic['post_replies'] == '' && $pun_user['g_can_thanks'] == '1'))
+				$post_actions[] = '<li class="postthanks"><span><a href="thanks.php?tid='.$id.'&amp;pid='.$cur_post['id'].'">'.$lang_thanks['Say Thanks'].'</a></span></li>';
+                        */
 		}
 	}
 	else
@@ -340,6 +391,8 @@ while ($cur_post = $db->fetch_assoc($result))
 		$post_actions[] = '<li class="postdelete"><span><a href="delete.php?id='.$cur_post['id'].'">'.$lang_topic['Delete'].'</a></span></li>';
 		$post_actions[] = '<li class="postedit"><span><a href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
 		$post_actions[] = '<li class="postquote"><span><a href="post.php?tid='.$id.'&amp;qid='.$cur_post['id'].'">'.$lang_topic['Quote'].'</a></span></li>';
+		$post_actions[] = '<li class="postthanks2"><span><a href="thanks2.php?tid='.$id.'&amp;pid='.$cur_post['id'].'">'.$lang_thanks2['Say Thanks'].'</a></span></li>';
+		//$post_actions[] = '<li class="postthanks"><span><a href="thanks.php?tid='.$id.'&amp;pid='.$cur_post['id'].'">'.$lang_thanks['Say Thanks'].'</a></span></li>';
 	}
 
 	// Perform the main parsing of the message (BBCode, smilies, censor words etc)
@@ -373,6 +426,10 @@ while ($cur_post = $db->fetch_assoc($result))
 					</dl>
 				</div>
 				<div class="postright">
+<div class="thanks2">
+<?php echo sprintf($lang_thanks2['Thanks'], $num_thanks2);
+?><img src="img/thumbup.png" width="31" height="26" align="absbottom" oncontextmenu="return false">
+</div>
 					<h3><?php if ($cur_post['id'] != $cur_topic['first_post_id']) echo $lang_topic['Re'].' '; ?><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></h3>
 					<div class="postmsg">
 						<?php echo $cur_post['message']."\n" ?>
@@ -430,6 +487,7 @@ $cur_index = 1;
 					<legend><?php echo $lang_common['Write message legend'] ?></legend>
 					<div class="infldset txtarea">
 						<input type="hidden" name="form_sent" value="1" />
+						<input type="hidden" name="form_user" value="<?php echo pun_htmlspecialchars($pun_user['username']) ?>" />
 <?php if ($pun_config['o_topic_subscriptions'] == '1' && ($pun_user['auto_notify'] == '1' || $cur_topic['is_subscribed'])): ?>						<input type="hidden" name="subscribe" value="1" />
 <?php endif; ?>
 <?php
@@ -452,6 +510,16 @@ else
 
 ?>
 <textarea name="req_message" rows="7" cols="75" tabindex="<?php echo $cur_index++ ?>"></textarea></label>
+<?php /* FluxToolBar */
+if (file_exists(FORUM_CACHE_DIR.'cache_fluxtoolbar_quickform.php'))
+	include FORUM_CACHE_DIR.'cache_fluxtoolbar_quickform.php';
+else
+{
+	require_once PUN_ROOT.'include/cache_fluxtoolbar.php';
+	generate_ftb_cache('quickform');
+	require FORUM_CACHE_DIR.'cache_fluxtoolbar_quickform.php';
+}
+?>
 						<ul class="bblinks">
 							<li><span><a href="help.php#bbcode" onclick="window.open(this.href); return false;"><?php echo $lang_common['BBCode'] ?></a> <?php echo ($pun_config['p_message_bbcode'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></span></li>
 							<li><span><a href="help.php#img" onclick="window.open(this.href); return false;"><?php echo $lang_common['img tag'] ?></a> <?php echo ($pun_config['p_message_bbcode'] == '1' && $pun_config['p_message_img_tag'] == '1') ? $lang_common['on'] : $lang_common['off']; ?></span></li>
