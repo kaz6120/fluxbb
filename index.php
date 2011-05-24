@@ -45,11 +45,14 @@ define('PUN_ALLOW_INDEX', 1);
 define('PUN_ACTIVE_PAGE', 'index');
 require PUN_ROOT.'header.php';
 
+$show = '20'; // Change 5 by the number of topics you want the mod to display
+require PUN_ROOT.'include/last-topics.php';
+
 // Print the categories and forums
 $result = $db->query('SELECT c.id AS cid, c.cat_name, f.id AS fid, f.forum_name, f.forum_desc, f.redirect_url, f.moderators, f.num_topics, f.num_posts, f.last_post, f.last_post_id, f.last_poster FROM '.$db->prefix.'categories AS c INNER JOIN '.$db->prefix.'forums AS f ON c.id=f.cat_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE fp.read_forum IS NULL OR fp.read_forum=1 ORDER BY c.disp_position, c.id, f.disp_position', true) or error('Unable to fetch category/forum list', __FILE__, __LINE__, $db->error());
 
 $cur_category = 0;
-$cat_count = 0;
+$cat_count = 1;
 $forum_count = 0;
 while ($cur_forum = $db->fetch_assoc($result))
 {
@@ -58,26 +61,30 @@ while ($cur_forum = $db->fetch_assoc($result))
 	if ($cur_forum['cid'] != $cur_category) // A new category since last iteration?
 	{
 		if ($cur_category != 0)
-			echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
+			echo '     </tbody>' . "\n" .
+			     '    </table>'  . "\n" .
+			     '   </div>'     . "\n" .
+			     '  </div>'      . "\n" .
+			     ' </div>'."\n\n";
 
 		++$cat_count;
 		$forum_count = 0;
 
 ?>
 <div id="idx<?php echo $cat_count ?>" class="blocktable">
-	<h2><span><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></span></h2>
-	<div class="box">
-		<div class="inbox">
-			<table cellspacing="0">
-			<thead>
-				<tr>
-					<th class="tcl" scope="col"><?php echo $lang_common['Forum'] ?></th>
-					<th class="tc2" scope="col"><?php echo $lang_index['Topics'] ?></th>
-					<th class="tc3" scope="col"><?php echo $lang_common['Posts'] ?></th>
-					<th class="tcr" scope="col"><?php echo $lang_common['Last post'] ?></th>
-				</tr>
-			</thead>
-			<tbody>
+ <h2><span><?php echo pun_htmlspecialchars($cur_forum['cat_name']) ?></span></h2>
+  <div class="box">
+   <div class="inbox">
+    <table cellspacing="0">
+     <thead>
+      <tr>
+       <th class="tcl" scope="col"><?php echo $lang_common['Forum'] ?></th>
+       <th class="tc2" scope="col"><?php echo $lang_index['Topics'] ?></th>
+       <th class="tc3" scope="col"><?php echo $lang_common['Posts'] ?></th>
+       <th class="tcr" scope="col"><?php echo $lang_common['Last post'] ?></th>
+      </tr>
+     </thead>
+     <tbody>
 <?php
 
 		$cur_category = $cur_forum['cid'];
@@ -148,26 +155,30 @@ while ($cur_forum = $db->fetch_assoc($result))
 	}
 
 ?>
-				<tr class="<?php echo $item_status ?>">
-					<td class="tcl">
-						<div class="<?php echo $icon_type ?>"><div class="nosize"><?php echo forum_number_format($forum_count) ?></div></div>
-						<div class="tclcon">
-							<div>
-								<?php echo $forum_field."\n".$moderators ?>
-							</div>
-						</div>
-					</td>
-					<td class="tc2"><?php echo forum_number_format($num_topics) ?></td>
-					<td class="tc3"><?php echo forum_number_format($num_posts) ?></td>
-					<td class="tcr"><?php echo $last_post ?></td>
-				</tr>
+      <tr class="<?php echo $item_status ?>">
+       <td class="tcl">
+        <div class="<?php echo $icon_type ?>"><div class="nosize"><?php echo forum_number_format($forum_count) ?></div></div>
+	<div class="tclcon">
+	 <div>
+          <?php echo $forum_field."\n".$moderators ?>
+         </div>
+        </div>
+       </td>
+       <td class="tc2"><?php echo forum_number_format($num_topics) ?></td>
+       <td class="tc3"><?php echo forum_number_format($num_posts) ?></td>
+       <td class="tcr"><?php echo $last_post ?></td>
+      </tr>
 <?php
 
 }
 
 // Did we output any categories and forums?
 if ($cur_category > 0)
-	echo "\t\t\t".'</tbody>'."\n\t\t\t".'</table>'."\n\t\t".'</div>'."\n\t".'</div>'."\n".'</div>'."\n\n";
+	echo '      </tbody>' . "\n" .
+	     '     </table>'  . "\n" .
+	     '    </div>'     . "\n" . 
+	     '   </div>'      . "\n" . 
+	     '  </div>'       . "\n\n";
 else
 	echo '<div id="idx0" class="block"><div class="box"><div class="inbox"><p>'.$lang_index['Empty board'].'</p></div></div></div>';
 
@@ -207,18 +218,18 @@ if (!empty($forum_actions))
 
 ?>
 <div id="brdstats" class="block">
-	<h2><span><?php echo $lang_index['Board info'] ?></span></h2>
-	<div class="box">
-		<div class="inbox">
-			<dl class="conr">
-				<dt><strong><?php echo $lang_index['Board stats'] ?></strong></dt>
-				<dd><span><?php printf($lang_index['No of users'], '<strong>'.forum_number_format($stats['total_users']).'</strong>') ?></span></dd>
-				<dd><span><?php printf($lang_index['No of topics'], '<strong>'.forum_number_format($stats['total_topics']).'</strong>') ?></span></dd>
-				<dd><span><?php printf($lang_index['No of posts'], '<strong>'.forum_number_format($stats['total_posts']).'</strong>') ?></span></dd>
-			</dl>
-			<dl class="conl">
-				<dt><strong><?php echo $lang_index['User info'] ?></strong></dt>
-				<dd><span><?php printf($lang_index['Newest user'], $stats['newest_user']) ?></span></dd>
+ <h2><span><?php echo $lang_index['Board info'] ?></span></h2>
+  <div class="box">
+   <div class="inbox">
+    <dl class="conr">
+     <dt><strong><?php echo $lang_index['Board stats'] ?></strong></dt>
+     <dd><span><?php printf($lang_index['No of users'], '<strong>'.forum_number_format($stats['total_users']).'</strong>') ?></span></dd>
+     <dd><span><?php printf($lang_index['No of topics'], '<strong>'.forum_number_format($stats['total_topics']).'</strong>') ?></span></dd>
+     <dd><span><?php printf($lang_index['No of posts'], '<strong>'.forum_number_format($stats['total_posts']).'</strong>') ?></span></dd>
+    </dl>
+    <dl class="conl">
+     <dt><strong><?php echo $lang_index['User info'] ?></strong></dt>
+     <dd><span><?php printf($lang_index['Newest user'], $stats['newest_user']) ?></span></dd>
 <?php
 
 if ($pun_config['o_users_online'] == '1')
@@ -233,31 +244,37 @@ if ($pun_config['o_users_online'] == '1')
 		if ($pun_user_online['user_id'] > 1)
 		{
 			if ($pun_user['g_view_users'] == '1')
-				$users[] = "\n\t\t\t\t".'<dd><a href="profile.php?id='.$pun_user_online['user_id'].'">'.pun_htmlspecialchars($pun_user_online['ident']).'</a>';
+				$users[] = "\n" .
+				           '     <dd><a href="profile.php?id='.$pun_user_online['user_id'].'">'.pun_htmlspecialchars($pun_user_online['ident']).'</a>';
 			else
-				$users[] = "\n\t\t\t\t".'<dd>'.pun_htmlspecialchars($pun_user_online['ident']);
+				$users[] = "\n" .
+				           '     <dd>'.pun_htmlspecialchars($pun_user_online['ident']);
 		}
 		else
 			++$num_guests;
 	}
 
 	$num_users = count($users);
-	echo "\t\t\t\t".'<dd><span>'.sprintf($lang_index['Users online'], '<strong>'.forum_number_format($num_users).'</strong>').'</span></dd>'."\n\t\t\t\t".'<dd><span>'.sprintf($lang_index['Guests online'], '<strong>'.forum_number_format($num_guests).'</strong>').'</span></dd>'."\n\t\t\t".'</dl>'."\n";
+	echo '     <dd><span>'.sprintf($lang_index['Users online'], '<strong>'.forum_number_format($num_users).'</strong>').'</span></dd>'."\n\t\t\t\t".'<dd><span>'.sprintf($lang_index['Guests online'], '<strong>'.forum_number_format($num_guests).'</strong>').'</span></dd>'."\n\t\t\t".'</dl>'."\n";
 
 
 	if ($num_users > 0)
-		echo "\t\t\t".'<dl id="onlinelist" class="clearb">'."\n\t\t\t\t".'<dt><strong>'.$lang_index['Online'].' </strong></dt>'."\t\t\t\t".implode(',</dd> ', $users).'</dd>'."\n\t\t\t".'</dl>'."\n";
+		echo "\t" .
+		     '    <dl id="onlinelist" class="clearb">'."\n".
+		     '     <dt><strong>'.$lang_index['Online'].' </strong></dt>'."\t".implode(',</dd> ', $users).'</dd>'."\n".
+		     '    </dl>'."\n";
 	else
-		echo "\t\t\t".'<div class="clearer"></div>'."\n";
+		echo '     <div class="clearer"></div>'."\n";
 
 }
 else
-	echo "\t\t\t".'</dl>'."\n\t\t\t".'<div class="clearer"></div>'."\n";
+	echo '    </dl>'."\n".
+	     '    <div class="clearer"></div>'."\n";
 
 
 ?>
-		</div>
-	</div>
+  </div>
+ </div>
 </div>
 <?php
 
