@@ -441,8 +441,18 @@ function check_username($username, $exclude_id = null)
 		$errors[] = $lang_prof_reg['Username IP'];
 	else if ((strpos($username, '[') !== false || strpos($username, ']') !== false) && strpos($username, '\'') !== false && strpos($username, '"') !== false)
 		$errors[] = $lang_prof_reg['Username reserved chars'];
-	else if (preg_match('/(?:\[\/?(?:b|u|s|ins|del|em|i|h|colou?r|quote|code|img|url|email|list|\*|topic|post|forum|user)\]|\[(?:img|url|quote|list)=)/i', $username))
+	else if (preg_match('/(?:\[\/?(?:b|u|s|ins|del|em|i|h|colou?r|quote|code|img|url|email|list|\*)\]|\[(?:img|url|quote|list)=)/i', $username))
 		$errors[] = $lang_prof_reg['Username BBCode'];
+
+	/* FluxToolBar */
+	if (file_exists(FORUM_CACHE_DIR.'cache_fluxtoolbar_tag_check.php'))
+		include FORUM_CACHE_DIR.'cache_fluxtoolbar_tag_check.php';
+	else
+	{
+		require_once PUN_ROOT.'include/cache_fluxtoolbar.php';
+		generate_ftb_cache('tags');
+		require FORUM_CACHE_DIR.'cache_fluxtoolbar_tag_check.php';
+	}
 
 	// Check username for any censored words
 	if ($pun_config['o_censoring'] == '1' && censor_words($username) != $username)
@@ -522,6 +532,7 @@ function generate_profile_menu($page = '')
 <?php if ($pun_config['o_avatars'] == '1' || $pun_config['o_signatures'] == '1'): ?>					<li<?php if ($page == 'personality') echo ' class="isactive"'; ?>><a href="profile.php?section=personality&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section personality'] ?></a></li>
 <?php endif; ?>					<li<?php if ($page == 'display') echo ' class="isactive"'; ?>><a href="profile.php?section=display&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section display'] ?></a></li>
 					<li<?php if ($page == 'privacy') echo ' class="isactive"'; ?>><a href="profile.php?section=privacy&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section privacy'] ?></a></li>
+<?php require PUN_ROOT.'include/uploadp.php'; ?>
 <?php if ($pun_user['g_id'] == PUN_ADMIN || ($pun_user['g_moderator'] == '1' && $pun_user['g_mod_ban_users'] == '1')): ?>					<li<?php if ($page == 'admin') echo ' class="isactive"'; ?>><a href="profile.php?section=admin&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section admin'] ?></a></li>
 <?php endif; ?>				</ul>
 			</div>
@@ -707,6 +718,11 @@ function delete_topic($topic_id)
 
 	// Delete any subscriptions for this topic
 	$db->query('DELETE FROM '.$db->prefix.'topic_subscriptions WHERE topic_id='.$topic_id) or error('Unable to delete subscriptions', __FILE__, __LINE__, $db->error());
+
+	// Delete any thanks for this post
+	$db->query('DELETE FROM '.$db->prefix.'thanks WHERE topic_id='.$topic_id) or error('Unable to delete thanks', __FILE__, __LINE__, $db->error());
+	// Delete any thanks for this post
+	$db->query('DELETE FROM '.$db->prefix.'thanks2 WHERE topic_id='.$topic_id) or error('Unable to delete thanks', __FILE__, __LINE__, $db->error());
 }
 
 
@@ -723,6 +739,11 @@ function delete_post($post_id, $topic_id)
 
 	// Delete the post
 	$db->query('DELETE FROM '.$db->prefix.'posts WHERE id='.$post_id) or error('Unable to delete post', __FILE__, __LINE__, $db->error());
+
+	// Delete any thanks for this post
+	$db->query('DELETE FROM '.$db->prefix.'thanks WHERE post_id='.$post_id) or error('Unable to delete thanks', __FILE__, __LINE__, $db->error());
+	// Delete any thanks for this post
+	$db->query('DELETE FROM '.$db->prefix.'thanks2 WHERE post_id='.$post_id) or error('Unable to delete thanks', __FILE__, __LINE__, $db->error());
 
 	strip_search_index($post_id);
 
@@ -925,7 +946,7 @@ function paginate($num_pages, $cur_page, $link)
 //
 function message($message, $no_back_link = false)
 {
-	global $db, $lang_common, $pun_config, $pun_start, $tpl_main, $pun_user;
+	global $db, $lang_common, $pun_config, $pun_start, $tpl_main, $pun_user, $lang_pms;
 
 	if (!defined('PUN_HEADER'))
 	{
