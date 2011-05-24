@@ -12,14 +12,14 @@
 <div class="punwrap">
 
 <div id="brdheader" class="block">
-	<div class="box">
-		<div id="brdtitle" class="inbox">
-			<pun_title>
-			<pun_desc>
-		</div>
-		<pun_navlinks>
-		<pun_status>
-	</div>
+ <div class="box">
+  <div id="brdtitle" class="inbox">
+   <pun_title>
+   <pun_desc>
+  </div>
+ <pun_navlinks>
+ <pun_status>
+</div>
 </div>
 
 <pun_announcement>
