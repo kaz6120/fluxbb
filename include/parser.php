@@ -1,4 +1,4 @@
-
+<?php
 
 /**
  * Copyright (C) 2008-2011 FluxBB
