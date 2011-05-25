@@ -89,9 +89,9 @@ else if ($action == 'last')
 
 // Fetch some info about the topic
 if (!$pun_user['is_guest'])
-	$result = $db->query('SELECT t.subject, t.closed, t.num_replies, t.sticky, t.first_post_id, f.id AS forum_id, f.forum_name, f.moderators, fp.post_replies, s.user_id AS is_subscribed FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'topic_subscriptions AS s ON (t.id=s.topic_id AND s.user_id='.$pun_user['id'].') LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.id='.$id.' AND t.moved_to IS NULL') or error('Unable to fetch topic info', __FILE__, __LINE__, $db->error());
+	$result = $db->query('SELECT t.subject, t.closed, t.num_replies, t.sticky, t.first_post_id, t.last_post_id, f.id AS forum_id, f.forum_name, f.moderators, fp.post_replies, s.user_id AS is_subscribed FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'topic_subscriptions AS s ON (t.id=s.topic_id AND s.user_id='.$pun_user['id'].') LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.id='.$id.' AND t.moved_to IS NULL') or error('Unable to fetch topic info', __FILE__, __LINE__, $db->error());
 else
-	$result = $db->query('SELECT t.subject, t.closed, t.num_replies, t.sticky, t.first_post_id, f.id AS forum_id, f.forum_name, f.moderators, fp.post_replies, 0 AS is_subscribed FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.id='.$id.' AND t.moved_to IS NULL') or error('Unable to fetch topic info', __FILE__, __LINE__, $db->error());
+	$result = $db->query('SELECT t.subject, t.closed, t.num_replies, t.sticky, t.first_post_id, t.last_post_id, f.id AS forum_id, f.forum_name, f.moderators, fp.post_replies, 0 AS is_subscribed FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.id='.$id.' AND t.moved_to IS NULL') or error('Unable to fetch topic info', __FILE__, __LINE__, $db->error());
 
 if (!$db->num_rows($result))
 	message($lang_common['Bad request']);
@@ -226,10 +226,10 @@ require PUN_ROOT.'header.php';
 
 require PUN_ROOT.'include/parser.php';
 
-$post_count = 0; // Keep track of post numbers
+$post_count = isset($_GET['pcount']) ? intval($_GET['pcount']) : 0; // Keep track of post numbers
 
 // Retrieve a list of post IDs, LIMIT is (really) expensive so we only fetch the IDs here then later fetch the remaining data
-$result = $db->query('SELECT id FROM '.$db->prefix.'posts WHERE topic_id='.$id.' ORDER BY id LIMIT '.$start_from.','.$pun_user['disp_posts']) or error('Unable to fetch post IDs', __FILE__, __LINE__, $db->error());
+$result = $db->query('SELECT id FROM '.$db->prefix.'posts WHERE topic_id='.$id.(isset($_GET['lpid']) ? ' AND id > '.intval($_GET['lpid']) : '').' ORDER BY id LIMIT '.$start_from.','.$pun_user['disp_posts']) or error('Unable to fetch post IDs', __FILE__, __LINE__, $db->error());
 
 $post_ids = array();
 for ($i = 0;$cur_post_id = $db->result($result, $i);$i++)
@@ -357,8 +357,6 @@ $users_thanks2 = array();
 			$user_contacts[] = '<span class="email"><a href="mailto:'.$cur_post['poster_email'].'">'.$lang_common['Email'].'</a></span>';
 	}
 
-         $topic_comment_id =  $start_from + $post_count;
-
 	// Generation post action array (quote, edit, delete etc.)
 	if (!$is_admmod)
 	{
@@ -380,7 +378,7 @@ $users_thanks2 = array();
 
                         if (($cur_topic['post_replies'] == '' && $pun_user['g_can_thanks'] == '1'))
                                 
-				$post_actions[] = '<li class="postthanks2"><span><a href="thanks2.php?tid='.$id.'&amp;pid='.$cur_post['id'].'#'.$topic_comment_id.'">'.$lang_thanks2['Say Thanks'].'</a></span></li>';
+				$post_actions[] = '<li class="postthanks2"><span><a href="thanks2.php?tid='.$id.'&amp;pid='.$cur_post['id'].'#p'.$cur_post['id'].'">'.$lang_thanks2['Say Thanks'].'</a></span></li>';
 			
                         /*	
                         if (($cur_topic['post_replies'] == '' && $pun_user['g_can_thanks'] == '1'))
@@ -394,7 +392,7 @@ $users_thanks2 = array();
 		$post_actions[] = '<li class="postdelete"><span><a href="delete.php?id='.$cur_post['id'].'">'.$lang_topic['Delete'].'</a></span></li>';
 		$post_actions[] = '<li class="postedit"><span><a href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
 		$post_actions[] = '<li class="postquote"><span><a href="post.php?tid='.$id.'&amp;qid='.$cur_post['id'].'">'.$lang_topic['Quote'].'</a></span></li>';
-		$post_actions[] = '<li class="postthanks2"><span><a href="thanks2.php?tid='.$id.'&amp;pid='.$cur_post['id'].'#'.$topic_comment_id.'">'.$lang_thanks2['Say Thanks'].'</a></span><img src="img/thumbup.png" width="31" height="26" align="absbottom" oncontextmenu="return false"></li>';
+		$post_actions[] = '<li class="postthanks2"><span><a href="thanks2.php?tid='.$id.'&amp;pid='.$cur_post['id'].'#p'.$cur_post['id'].'">'.$lang_thanks2['Say Thanks'].'</a></span><img src="img/thumbup.png" width="31" height="26" align="absbottom" oncontextmenu="return false"></li>';
 		//$post_actions[] = '<li class="postthanks"><span><a href="thanks.php?tid='.$id.'&amp;pid='.$cur_post['id'].'">'.$lang_thanks['Say Thanks'].'</a></span></li>';
 	}
 
@@ -468,17 +466,18 @@ $users_thanks2 = array();
 }
 
 ?>
+<div id="aqp"></div>
 <div class="postlinksb">
-	<div class="inbox crumbsplus">
-		<div class="pagepost">
-			<p class="pagelink conl"><?php echo $paging_links ?></p>
-<?php echo $post_link ?>
-		</div>
-		<ul class="crumbs">
-			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
-			<li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
-		</ul>
+ <div class="inbox crumbsplus">
+  <div class="pagepost">
+   <p class="pagelink conl"><?php echo $paging_links ?></p>
+   <?php echo $post_link ?>
+  </div>
+  <ul class="crumbs">
+   <li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
+   <li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
+   <li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
+</ul>
 <?php echo $subscraction ?>
 		<div class="clearer"></div>
 	</div>
@@ -494,16 +493,17 @@ $cur_index = 1;
 
 ?>
 <div id="quickpost" class="blockform">
-	<h2><span><?php echo $lang_topic['Quick post'] ?></span></h2>
-	<div class="box">
-		<form id="quickpostform" method="post" action="post.php?tid=<?php echo $id ?>" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">
-			<div class="inform">
-				<fieldset>
-					<legend><?php echo $lang_common['Write message legend'] ?></legend>
-					<div class="infldset txtarea">
-						<input type="hidden" name="form_sent" value="1" />
-						<input type="hidden" name="form_user" value="<?php echo pun_htmlspecialchars($pun_user['username']) ?>" />
-<?php if ($pun_config['o_topic_subscriptions'] == '1' && ($pun_user['auto_notify'] == '1' || $cur_topic['is_subscribed'])): ?>						<input type="hidden" name="subscribe" value="1" />
+ <h2><span><?php echo $lang_topic['Quick post'] ?></span></h2>
+  <div class="box">
+   <form id="quickpostform" method="post" action="post.php?tid=<?php echo $id ?>" onsubmit="this.submit.disabled=true;if(process_form(this)){return true;}else{this.submit.disabled=false;return false;}">
+   <div class="inform">
+    <fieldset>
+     <legend><?php echo $lang_common['Write message legend'] ?></legend>
+      <div class="infldset txtarea">
+      <input type="hidden" name="form_sent" value="1" />
+      <input type="hidden" name="form_user" value="<?php echo pun_htmlspecialchars($pun_user['username']) ?>" />
+<?php if ($pun_config['o_topic_subscriptions'] == '1' && ($pun_user['auto_notify'] == '1' || $cur_topic['is_subscribed'])): ?>
+      <input type="hidden" name="subscribe" value="1" />
 <?php endif; ?>
 <?php
 
@@ -543,7 +543,16 @@ else
 					</div>
 				</fieldset>
 			</div>
-			<p class="buttons"><input type="submit" name="submit" tabindex="<?php echo $cur_index++ ?>" value="<?php echo $lang_common['Submit'] ?>" accesskey="s" /> <input type="submit" name="preview" value="<?php echo $lang_topic['Preview'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="p" /></p>
+			<script type="text/javascript">
+				var aqp_last_post_id = <?php echo $cur_topic['last_post_id'] ?>; 
+				var aqp_post_count = <?php echo $start_from + $post_count ?>;
+				var aqp_tid = <?php echo $id ?>;
+			</script>
+			<p class="buttons">
+				<input type="submit" name="submit" onclick="if (aqp_post(this.form)) {return true;} else {return false;}" tabindex="<?php echo $cur_index++ ?>" value="<?php echo $lang_common['Submit'] ?>" accesskey="s" /> 
+				<input type="submit" name="preview" value="<?php echo $lang_topic['Preview'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="p" />
+				<span id="aqp-icon" style="background: url(img/ajax_quick_post/loading.gif) no-repeat; padding: 1px 8px; margin-left: 5px; display: none;"></span>
+			</p>
 		</form>
 	</div>
 </div>
