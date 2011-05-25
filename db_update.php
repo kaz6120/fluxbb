@@ -469,7 +469,7 @@ if (empty($stage))
 <title><?php echo $lang_update['Update'] ?></title>
 <link rel="stylesheet" type="text/css" href="style/<?php echo $default_style ?>.css" />
 </head>
-<body onload="document.getElementById('install').req_db_pass.focus();document.getElementById('install').start.disabled=false;">
+<body onload="document.getElementById('install').req_db_type.focus();document.getElementById('install').start.disabled=false;">
 
 <div id="pundb_update" class="pun">
 <div class="top-box"><div><!-- Top Corners --></div></div>
@@ -488,7 +488,7 @@ if (empty($stage))
 <div class="blockform">
 	<h2><span><?php echo $lang_update['Update'] ?></span></h2>
 	<div class="box">
-		<form id="install" method="post" action="db_update.php">
+		<form method="post" action="db_update.php">
 			<input type="hidden" name="stage" value="start" />
 			<div class="inform">
 				<fieldset>
@@ -1828,5 +1828,4 @@ $db->end_transaction();
 $db->close();
 
 if ($query_str != '')
-	exit('<script type="text/javascript">window.location="db_update.php'.$query_str.'&uid='.$uid.'"</script><noscript><meta http-equiv="refresh" content="0;url=db_update.php'.$query_str.'&uid='.$uid.'" /></noscript>');
-
+	exit('<script type="text/javascript">window.location="db_update.php'.$query_str.'&uid='.$uid.'"</script><noscript>'.sprintf($lang_update['JavaScript disabled'], sprintf('<a href="db_update.php'.$query_str.'&uid='.$uid.'">%s</a>', $lang_update['Click here to continue'])).'</noscript>');
