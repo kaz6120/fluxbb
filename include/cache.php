@@ -137,7 +137,9 @@ function generate_quickjump_cache($group_id = false)
 
 			if ($db->num_rows($result))
 			{
-				$output .= "\t\t\t\t".'<form id="qjump" method="get" action="viewforum.php">'."\n\t\t\t\t\t".'<div><label><span><?php echo $lang_common[\'Jump to\'] ?>'.'<br /></span>'."\n\t\t\t\t\t".'<select name="id" onchange="window.location=(\'viewforum.php?id=\'+this.options[this.selectedIndex].value)">'."\n";
+				$output .= '    <form id="qjump" method="get" action="viewforum.php">'."\n"
+                                        .  '     <div><label><span><?php echo $lang_common[\'Jump to\'] ?>'.'<br /></span>'."\n"
+                                        .  '      <select name="id" onchange="window.location=(\'viewforum.php?id=\'+this.options[this.selectedIndex].value)">'."\n";
 
 				$cur_category = 0;
 				while ($cur_forum = $db->fetch_assoc($result))
@@ -145,17 +147,21 @@ function generate_quickjump_cache($group_id = false)
 					if ($cur_forum['cid'] != $cur_category) // A new category since last iteration?
 					{
 						if ($cur_category)
-							$output .= "\t\t\t\t\t\t".'</optgroup>'."\n";
+							$output .= '       </optgroup>'."\n";
 
-						$output .= "\t\t\t\t\t\t".'<optgroup label="'.pun_htmlspecialchars($cur_forum['cat_name']).'">'."\n";
+						$output .= '       <optgroup label="'.pun_htmlspecialchars($cur_forum['cat_name']).'">'."\n";
 						$cur_category = $cur_forum['cid'];
 					}
 
 					$redirect_tag = ($cur_forum['redirect_url'] != '') ? ' &gt;&gt;&gt;' : '';
-					$output .= "\t\t\t\t\t\t\t".'<option value="'.$cur_forum['fid'].'"<?php echo ($forum_id == '.$cur_forum['fid'].') ? \' selected="selected"\' : \'\' ?>>'.pun_htmlspecialchars($cur_forum['forum_name']).$redirect_tag.'</option>'."\n";
+					$output .= '        <option value="'.$cur_forum['fid'].'"<?php echo ($forum_id == '.$cur_forum['fid'].') ? \' selected="selected"\' : \'\' ?>>'.pun_htmlspecialchars($cur_forum['forum_name']).$redirect_tag.'</option>'."\n";
 				}
 
-				$output .= "\t\t\t\t\t\t".'</optgroup>'."\n\t\t\t\t\t".'</select>'."\n\t\t\t\t\t".'<input type="submit" value="<?php echo $lang_common[\'Go\'] ?>" accesskey="g" />'."\n\t\t\t\t\t".'</label></div>'."\n\t\t\t\t".'</form>'."\n";
+				$output .= '       </optgroup>'."\n"
+                                        .  '      </select>'."\n"
+                                        .  '      <input type="submit" value="<?php echo $lang_common[\'Go\'] ?>" accesskey="g" />'."\n"
+                                        .  '     </label></div>'."\n"
+                                        .  '   </form>'."\n";
 			}
 		}
 
