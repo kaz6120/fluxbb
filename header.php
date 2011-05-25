@@ -240,7 +240,9 @@ if ($pun_user['g_read_board'] == '1' && $pun_config['o_additional_navlinks'] != 
 	}
 }
 
-$tpl_temp = '<div id="brdmenu" class="inbox">'."\n\t\t\t".'<ul>'."\n\t\t\t\t".implode("\n\t\t\t\t", $links)."\n\t\t\t".'</ul>'."\n\t\t".'</div>';
+//$tpl_temp = '<div id="brdmenu" class="inbox">'."\n\t\t\t".'<ul>'."\n\t\t\t\t".implode("\n\t\t\t\t", $links)."\n\t\t\t".'</ul>'."\n\t\t".'</div>';
+$tpl_temp = '<div id="brdmenu" class="inbox">'."\n   ".'<ul>'."\n    ".implode("\n    ", $links)."\n   ".'</ul>'."\n  ".'</div>';
+
 $tpl_main = str_replace('<pun_navlinks>', $tpl_temp, $tpl_main);
 // END SUBST - <pun_navlinks>
 
@@ -311,27 +313,27 @@ if ($pun_user['g_read_board'] == '1' && $pun_user['g_search'] == '1')
 }
 
 // Generate all that jazz
-$tpl_temp = '<div id="brdwelcome" class="inbox">'."\n\t\t\t";
+$tpl_temp = '<div id="brdwelcome" class="inbox">'."\n   ";
 
 // The status information
 if (is_array($page_statusinfo))
 {
-	$tpl_temp .= "\n\t\t\t".'<ul class="conl">';
-	$tpl_temp .= "\n\t\t\t\t".implode("\n\t\t\t\t", $page_statusinfo);
-	$tpl_temp .= "\n\t\t\t".'</ul>';
+	$tpl_temp .= "\n   ".'<ul class="conl">';
+	$tpl_temp .= "\n    ".implode("\n    ", $page_statusinfo);
+	$tpl_temp .= "\n   ".'</ul>';
 }
 else
-	$tpl_temp .= "\n\t\t\t".$page_statusinfo;
+	$tpl_temp .= "\n   ".$page_statusinfo;
 
 // Generate quicklinks
 if (!empty($page_topicsearches))
 {
-	$tpl_temp .= "\n\t\t\t".'<ul class="conr">';
-	$tpl_temp .= "\n\t\t\t\t".'<li><span>'.$lang_common['Topic searches'].' '.implode(' | ', $page_topicsearches).'</span></li>';
-	$tpl_temp .= "\n\t\t\t".'</ul>'."\n\t\t\t".'<div class="clearer"></div>';
+	$tpl_temp .= "\n   ".'<ul class="conr">';
+	$tpl_temp .= "\n    ".'<li><span>'.$lang_common['Topic searches'].' '.implode(' | ', $page_topicsearches).'</span></li>';
+	$tpl_temp .= "\n   ".'</ul>'."\n   ".'<div class="clearer"></div>';
 }
 
-$tpl_temp .= "\n\t\t".'</div>';
+$tpl_temp .= "\n  ".'</div>';
 
 $tpl_main = str_replace('<pun_status>', $tpl_temp, $tpl_main);
 // END SUBST - <pun_status>
@@ -344,13 +346,13 @@ if ($pun_user['g_read_board'] == '1' && $pun_config['o_announcement'] == '1')
 
 ?>
 <div id="announce" class="block">
-	<div class="hd"><h2><span><?php echo $lang_common['Announcement'] ?></span></h2></div>
-	<div class="box">
-		<div id="announce-block" class="inbox">
-			<div class="usercontent"><?php echo $pun_config['o_announcement_message'] ?></div>
-		</div>
-	</div>
-</div>
+ <div class="hd"><h2><span><?php echo $lang_common['Announcement'] ?></span></h2></div>
+  <div class="box">
+   <div id="announce-block" class="inbox">
+    <div class="usercontent"><?php echo $pun_config['o_announcement_message'] ?></div>
+   </div>
+  </div>
+ </div>
 <?php
 
 	$tpl_temp = trim(ob_get_contents());
