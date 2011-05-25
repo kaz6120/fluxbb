@@ -1328,6 +1328,12 @@ function maintenance_message()
 //
 function redirect($destination_url, $message)
 {
+	if (isset($_GET['ajax']))
+	{
+		echo $message;
+		exit;
+	}
+
 	global $db, $pun_config, $lang_common, $pun_user;
 
 	// Prefix with base_url (unless there's already a valid URI)
