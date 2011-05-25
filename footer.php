@@ -10,6 +10,13 @@
 if (!defined('PUN'))
 	exit;
 
+if (isset($_GET['ajax']))
+{
+	$db->end_transaction();
+	$db->close();
+	return;
+}
+
 $tpl_temp = trim(ob_get_contents());
 $tpl_main = str_replace('<pun_main>', $tpl_temp, $tpl_main);
 ob_end_clean();
@@ -18,6 +25,9 @@ ob_end_clean();
 
 // START SUBST - <pun_footer>
 ob_start();
+
+require PUN_ROOT.'include/uploadf.php';
+
 
 ?>
 <div id="brdfooter" class="block">
