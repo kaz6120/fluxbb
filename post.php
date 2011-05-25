@@ -1,4 +1,4 @@
-
+<?php
 
 /**
  * Copyright (C) 2008-2011 FluxBB
@@ -407,10 +407,22 @@ if (isset($_POST['form_sent']))
 			$db->query('UPDATE '.$db->prefix.'online SET last_post='.$now.' WHERE ident=\''.$db->escape(get_remote_address()).'\'' ) or error('Unable to update user', __FILE__, __LINE__, $db->error());
 		}
 
+		if (isset($_GET['ajax']) && isset($_GET['lpid']))
+		{
+			$db->end_transaction();
+			$db->close();
+			header('Location: viewtopic.php?ajax&id='.$tid.'&pcount='.intval($_GET['pcount']).'&lpid='.intval($_GET['lpid']));
+		}
+
 		redirect('viewtopic.php?pid='.$new_pid.'#p'.$new_pid, $lang_post['Post redirect']);
 	}
 }
 
+if (isset($_GET['ajax']) && !empty($errors))
+{
+	echo implode("\n", $errors);
+	exit;
+}
 
 // If a topic ID was specified in the url (it's a reply)
 if ($tid)
