@@ -236,7 +236,7 @@ function checkAll(checkWhat,command){
 			<tbody>
 <?php
 // Fetch messages
-$result = $db->query('SELECT * FROM '.$db->prefix.'messages WHERE show_message=1 AND owner='.$pun_user['id'].' ORDER BY posted DESC LIMIT '.$limit) or error('Unable to find the list of the pms.', __FILE__, __LINE__, $db->error()); 
+$result = $db->query('SELECT * FROM '.$db->prefix.'messages WHERE show_message=1 AND owner='.$pun_user['id'].' ORDER BY last_post DESC LIMIT '.$limit) or error('Unable to find the list of the pms.', __FILE__, __LINE__, $db->error()); 
 
 // If there are messages in this folder.
 if ($db->num_rows($result))
