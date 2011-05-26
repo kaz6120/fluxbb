@@ -117,7 +117,7 @@ else
 	if ($is_admmod)
 		$post_link .= ' / <a href="post.php?tid='.$id.'">'.$lang_topic['Post reply'].'</a>';
 
-	$post_link = "\t\t\t".'<p class="postlink conr">'.$post_link.'</p>'."\n";
+	$post_link = '   <p class="postlink conr">'.$post_link.'</p>'."\n";
 }
 
 
@@ -413,36 +413,36 @@ $users_thanks2 = array();
 
 ?>
 <div id="p<?php echo $cur_post['id'] ?>" class="blockpost<?php echo ($post_count % 2 == 0) ? ' roweven' : ' rowodd' ?><?php if ($cur_post['id'] == $cur_topic['first_post_id']) echo ' firstpost'; ?><?php if ($post_count == 1) echo ' blockpost1'; ?>">
-	<h2><span><span class="conr">#<?php echo ($start_from + $post_count) ?></span> <a href="viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']) ?></a></span></h2>
-	<div class="box">
-		<div class="inbox">
-			<div class="postbody">
-				<div class="postleft">
-					<dl>
-						<dt><strong><?php echo $username ?></strong></dt>
-						<dd class="usertitle"><strong><?php echo $user_title ?></strong></dd>
-<?php if ($user_avatar != '') echo "\t\t\t\t\t\t".'<dd class="postavatar">'.$user_avatar.'</dd>'."\n"; ?>
-<?php if (count($user_info)) echo "\t\t\t\t\t\t".implode("\n\t\t\t\t\t\t", $user_info)."\n"; ?>
-<?php if (count($user_contacts)) echo "\t\t\t\t\t\t".'<dd class="usercontacts">'.implode(' ', $user_contacts).'</dd>'."\n"; ?>
-					</dl>
-				</div>
-				<div class="postright">
-					<h3><?php if ($cur_post['id'] != $cur_topic['first_post_id']) echo $lang_topic['Re'].' '; ?><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></h3>
-					<div class="postmsg">
-						<?php echo $cur_post['message']."\n" ?>
+ <h2><span><span class="conr">#<?php echo ($start_from + $post_count) ?></span> <a href="viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']) ?></a></span></h2>
+  <div class="box">
+   <div class="inbox">
+    <div class="postbody">
+     <div class="postleft">
+      <dl>
+       <dt><strong><?php echo $username ?></strong></dt>
+       <dd class="usertitle"><strong><?php echo $user_title ?></strong></dd>
+<?php if ($user_avatar != '') echo '       <dd class="postavatar">'.$user_avatar.'</dd>'."\n"; ?>
+<?php if (count($user_info)) echo "       ".implode("\n       ", $user_info)."\n"; ?>
+<?php if (count($user_contacts)) echo '       <dd class="usercontacts">'.implode(' ', $user_contacts).'</dd>'."\n"; ?>
+      </dl>
+     </div>
+     <div class="postright">
+       <h3><?php if ($cur_post['id'] != $cur_topic['first_post_id']) echo $lang_topic['Re'].' '; ?><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></h3>
+       <div class="postmsg">
+        <?php echo $cur_post['message']."\n" ?>
 <?php if ($cur_post['edited'] != '') echo "\t\t\t\t\t\t".'<p class="postedit"><em>'.$lang_topic['Last edit'].' '.pun_htmlspecialchars($cur_post['edited_by']).' ('.format_time($cur_post['edited']).')</em></p>'."\n"; ?>
-					</div>
-<?php if ($signature != '') echo "\t\t\t\t\t".'<div class="postsignature postmsg"><hr />'.$signature.'</div>'."\n"; ?>
-				</div>
-			</div>
-		</div>
-		<div class="inbox">
-			<div class="postfoot clearb">
-				<div class="postfootleft"><?php if ($cur_post['poster_id'] > 1) echo '<p>'.$is_online.'</p>'; ?></div>
-<?php if (count($post_actions)) echo "\t\t\t\t".'<div class="postfootright">'."\n\t\t\t\t\t".'<ul>'."\n\t\t\t\t\t\t".implode("\n\t\t\t\t\t\t", $post_actions)."\n\t\t\t\t\t".'</ul>'."\n\t\t\t\t".'</div>'."\n" ?>
-			</div>
-		</div>
-	</div>
+       </div>
+<?php if ($signature != '') echo '     <div class="postsignature postmsg"><hr />'.$signature.'</div>'."\n"; ?>
+      </div>
+     </div>
+    </div>
+    <div class="inbox">
+     <div class="postfoot clearb">
+      <div class="postfootleft"><?php if ($cur_post['poster_id'] > 1) echo '<p>'.$is_online.'</p>'; ?></div>
+<?php if (count($post_actions)) echo '      <div class="postfootright">'."\n       ".'<ul>'."\n        ".implode("\n        ", $post_actions)."\n       ".'</ul>'."\n      ".'</div>'."\n" ?>
+   </div>
+  </div>
+ </div>
 </div>
 
 <?php if ($num_thanks2 != '0')
