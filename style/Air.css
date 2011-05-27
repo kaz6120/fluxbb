@@ -254,18 +254,33 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
 /* Logo, Description and Main Menu
 ----------------------------------------------------------------*/
 
+/* Default Header
+-------------------------*/
 #brdtitle h1 {
-	padding: 0;
-    background: #44699c url(./Air/img/japan-militaire-forum.png) no-repeat;
-    height: 100px;
-    text-indent: -9999em;
+    padding: 0 0 10px 0;
 }
 
 #brddesc {
-	border-top-style: solid;
-	border-top-width: 10px;
-	padding: 10px 0;
+    border-top-style: dotted;
+    border-top-width: 1px;
+    padding: 10px 0;
 }
+
+/* Image Header Sample
+-------------------------*/
+/*#brdtitle h1 {*/
+    /*padding: 0;*/
+    /*background: #44699c url(./Air/img/japan-militaire-forum.png) no-repeat;*/
+    /*height: 100px;*/
+    /*text-indent: -9999em;*/
+/*}*/
+
+/*#brddesc {*/
+    /*border-top-style: solid;*/
+    /*border-top-width: 10px;*/
+    /*padding: 10px 0;*/
+/*}*/
+/*-----------------------*/
 
 #brddesc p {
 	padding: 0;
@@ -874,7 +889,7 @@ MAIN POSTS
 ----------------------------------------------------------------*/
 
 .pun .usercontent {
-	padding: 7px 0;
+    padding: 7px 0;
 }
 
 .pun .postmsg p, .pun .postmsg li, #punhelp p samp {
@@ -1657,4 +1672,21 @@ html, body, .pun {
 	margin: 4px 0 10px 0;
 	background: #fcfdfe;
 	border-color: #dfe6ee;
+}
+
+#announce-block {
+     padding-left: 40px;
+     background: url(Air/img/internet-group-chat.png) center left no-repeat;
+}
+
+#idx1 h2 {
+    background: url(Air/img/label_new_red.png) center left no-repeat !important;
+} #idx1 h2 span {
+    padding-left: 30px;
+}
+
+#online-users {
+    padding:7px;
+    padding-left: 28px;
+    background: url(Air/img/system-users.png) center left no-repeat !important;
 }
