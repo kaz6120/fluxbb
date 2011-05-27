@@ -424,6 +424,15 @@ $users_thanks2 = array();
 <?php if ($user_avatar != '') echo '       <dd class="postavatar">'.$user_avatar.'</dd>'."\n"; ?>
 <?php if (count($user_info)) echo "       ".implode("\n       ", $user_info)."\n"; ?>
 <?php if (count($user_contacts)) echo '       <dd class="usercontacts">'.implode(' ', $user_contacts).'</dd>'."\n"; ?>
+<?php 
+if ($post_count > 0) {
+// Load the profile.php language file
+require PUN_ROOT.'lang/'.$pun_user['language'].'/profile.php';
+
+    echo '       <dd><span><a href="search.php?action=show_user_topics&amp;user_id='. $cur_post['poster_id'] .'">' .$lang_profile['Show topics'].'</a></span></dd>' . "\n" . 
+         '       <dd><span><a href="search.php?action=show_user_posts&amp;user_id='. $cur_post['poster_id'] .'">'.$lang_profile['Show posts'].'</a></span></dd>' . "\n";
+}
+?>
       </dl>
      </div>
      <div class="postright">
