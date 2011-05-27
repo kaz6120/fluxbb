@@ -261,7 +261,7 @@ if ($pun_config['o_users_online'] == '1')
 	if ($num_users > 0)
 		echo "\t" .
 		     '    <dl id="onlinelist" class="clearb">'."\n".
-		     '     <dt><strong>'.$lang_index['Online'].' </strong></dt>'."\t".implode(',</dd> ', $users).'</dd>'."\n".
+		     '     <dt id="online-users"><strong>'.$lang_index['Online'].' </strong></dt>'."\t".implode(',</dd> ', $users).'</dd>'."\n".
 		     '    </dl>'."\n";
 	else
 		echo '     <div class="clearer"></div>'."\n";
