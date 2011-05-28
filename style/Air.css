@@ -268,18 +268,19 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
 
 /* Image Header Sample
 -------------------------*/
-/*#brdtitle h1 {*/
-    /*padding: 0;*/
+#brdtitle h1 {
+    padding: 0;
     /*background: #44699c url(./Air/img/japan-militaire-forum.png) no-repeat;*/
-    /*height: 100px;*/
-    /*text-indent: -9999em;*/
-/*}*/
+    background: #44699c url(./Air/img/japan-militaire-forum-2011-05.png) no-repeat;
+    height: 100px;
+    text-indent: -9999em;
+}
 
-/*#brddesc {*/
-    /*border-top-style: solid;*/
-    /*border-top-width: 10px;*/
-    /*padding: 10px 0;*/
-/*}*/
+#brddesc {
+    border-top-style: solid;
+    border-top-width: 10px;
+    padding: 10px 0;
+}
 /*-----------------------*/
 
 #brddesc p {
@@ -1676,7 +1677,7 @@ html, body, .pun {
 
 #announce-block {
      padding-left: 40px;
-     background: url(Air/img/internet-group-chat.png) center left no-repeat;
+     background: url(Air/img/info.png) center left no-repeat;
 }
 
 #idx1 h2 {
