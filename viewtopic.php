@@ -369,8 +369,10 @@ $users_thanks2 = array();
 			{
 				if ((($start_from + $post_count) == 1 && $pun_user['g_delete_topics'] == '1') || (($start_from + $post_count) > 1 && $pun_user['g_delete_posts'] == '1'))
 					$post_actions[] = '<li class="postdelete"><span><a href="delete.php?id='.$cur_post['id'].'">'.$lang_topic['Delete'].'</a></span></li>';
-				if ($pun_user['g_edit_posts'] == '1')
-					$post_actions[] = '<li class="postedit"><span><a href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
+				//if ($pun_user['g_edit_posts'] == '1')
+					//$post_actions[] = '<li class="postedit"><span><a href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
+				if ($pun_user['g_edit_posts'] == '1') 
+					$post_actions[] = '<li class="postedit"><span id="menu'.$cur_post['id'].'"><a onmouseover="ape_menu_hovered = true;" onmouseout="ape_menu_hovered = false;" onclick="if (ape_show_menu('.$cur_post['id'].')) {return true;} else {return false;}" href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
 			}
 
 			if (($cur_topic['post_replies'] == '' && $pun_user['g_post_replies'] == '1') || $cur_topic['post_replies'] == '1')
@@ -390,8 +392,10 @@ $users_thanks2 = array();
 	{
 		$post_actions[] = '<li class="postreport"><span><a href="misc.php?report='.$cur_post['id'].'">'.$lang_topic['Report'].'</a></span></li>';
 		$post_actions[] = '<li class="postdelete"><span><a href="delete.php?id='.$cur_post['id'].'">'.$lang_topic['Delete'].'</a></span></li>';
-		$post_actions[] = '<li class="postedit"><span><a href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
-		$post_actions[] = '<li class="postquote"><span><a href="post.php?tid='.$id.'&amp;qid='.$cur_post['id'].'">'.$lang_topic['Quote'].'</a></span></li>';
+		//$post_actions[] = '<li class="postedit"><span><a href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
+		//$post_actions[] = '<li class="postquote"><span><a href="post.php?tid='.$id.'&amp;qid='.$cur_post['id'].'">'.$lang_topic['Quote'].'</a></span></li>';
+		$post_actions[] = '<li class="postedit"><span id="menu'.$cur_post['id'].'"><a onmouseover="ape_menu_hovered = true;" onmouseout="ape_menu_hovered = false;" onclick="if (ape_show_menu('.$cur_post['id'].')) {return true;} else {return false;}" href="edit.php?id='.$cur_post['id'].'">'.$lang_topic['Edit'].'</a></span></li>';
+		$post_actions[] = '<li class="postquote"><span><a href="post.php?tid='.$id.'&amp;qid='.$cur_post['id'].'">'.$lang_topic['Quote'].'</a></span></li>';    
 		$post_actions[] = '<li class="postthanks2"><span><a href="thanks2.php?tid='.$id.'&amp;pid='.$cur_post['id'].'#p'.$cur_post['id'].'">'.$lang_thanks2['Say Thanks'].'</a></span><img src="img/thumbup.png" width="31" height="26" align="absbottom" oncontextmenu="return false"></li>';
 		//$post_actions[] = '<li class="postthanks"><span><a href="thanks.php?tid='.$id.'&amp;pid='.$cur_post['id'].'">'.$lang_thanks['Say Thanks'].'</a></span></li>';
 	}
@@ -437,7 +441,7 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/profile.php';
      </div>
      <div class="postright">
        <h3><?php if ($cur_post['id'] != $cur_topic['first_post_id']) echo $lang_topic['Re'].' '; ?><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></h3>
-       <div class="postmsg">
+       <div class="postmsg" id="post<?php echo $cur_post['id'] ?>">
         <?php echo $cur_post['message']."\n" ?>
 <?php if ($cur_post['edited'] != '') echo "\t\t\t\t\t\t".'<p class="postedit"><em>'.$lang_topic['Last edit'].' '.pun_htmlspecialchars($cur_post['edited_by']).' ('.format_time($cur_post['edited']).')</em></p>'."\n"; ?>
        </div>

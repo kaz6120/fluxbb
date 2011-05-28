@@ -163,6 +163,29 @@ $page_head['top'] = '<link rel="top" href="index.php" title="'.$lang_common['For
 
 require PUN_ROOT.'include/fancybox.php';
 
+// Begin "Ajax quick edit"
+if (basename($_SERVER['PHP_SELF']) == 'viewtopic.php')
+{
+	$page_head['jquery'] = '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>';
+	
+	if (file_exists(PUN_ROOT.'lang/'.$pun_user['language'].'/ajax_post_edit.php'))
+		require PUN_ROOT.'lang/'.$pun_user['language'].'/ajax_post_edit.php';
+	else
+		require PUN_ROOT.'lang/English/ajax_post_edit.php';
+	
+	$ape = 'var base_url = \''.$pun_config['o_base_url'].'\';';
+	$ape .= "\n".'var ape = {\'Loading\' : \''.$lang_ape['Loading'].'\'';
+	$ape .= ', \'Quick edit\' : \''.$lang_ape['Quick Edit'].'\'';
+	$ape .= ', \'Full edit\' : \''.$lang_ape['Full Edit'].'\'';
+	$ape .= ', \'Cancel edit confirm\' : \''.$lang_ape['Cancel edit confirm'].'\'';
+	$ape .= '}';
+	
+	$page_head['ape'] = '<script type="text/javascript">'."\n".$ape."\n".'</script>';
+	$page_head['ape_js'] = '<script type="text/javascript" src="include/ajax_post_edit/ajax_post_edit.js"></script>';
+	$page_head['ape_css'] = '<link rel="stylesheet" type="text/css" href="include/ajax_post_edit/style.css" />';
+}
+// End "Ajax quick edit"
+
 echo implode("\n", $page_head)."\n";
 
 $tpl_temp = trim(ob_get_contents());
