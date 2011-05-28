@@ -199,10 +199,10 @@ require PUN_ROOT.'header.php';
 ?>
 <div class="linkst">
  <div class="inbox crumbsplus">
-  <ul class="crumbs">
+  <ul id="crumbs-top">
    <li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-   <li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
-   <li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
+   <li><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
+   <li><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
   </ul>
   <div class="pagepost">
     <p class="pagelink conl"><?php echo $paging_links ?></p>
@@ -486,10 +486,10 @@ require PUN_ROOT.'lang/'.$pun_user['language'].'/profile.php';
    <p class="pagelink conl"><?php echo $paging_links ?></p>
    <?php echo $post_link ?>
   </div>
-  <ul class="crumbs">
+  <ul id="crumbs-bottom">
    <li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-   <li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
-   <li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
+   <li><a href="viewforum.php?id=<?php echo $cur_topic['forum_id'] ?>"><?php echo pun_htmlspecialchars($cur_topic['forum_name']) ?></a></li>
+   <li><a href="viewtopic.php?id=<?php echo $id ?>"><strong><?php echo pun_htmlspecialchars($cur_topic['subject']) ?></strong></a></li>
 </ul>
 <?php echo $subscraction ?>
 		<div class="clearer"></div>

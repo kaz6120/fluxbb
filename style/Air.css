@@ -451,7 +451,7 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
 	font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
 	font-size: 1.462em;
 	line-height: 1.211em;
-	padding: 7px 0;
+    padding: 7px 0;
 }
 
 .pun .linksb .crumbs, .pun .postlinksb .crumbs {
@@ -1690,4 +1690,39 @@ html, body, .pun {
     padding:7px;
     padding-left: 28px;
     background: url(Air/img/system-users.png) center left no-repeat !important;
+}
+
+
+/* Simple scalable breadcrumb by Veerle Pieters
+------------------------------------------------------------------*/
+#crumbs-top, #crumbs-bottom {
+    list-style-type:none;
+    padding:0 !important;
+    height: 2.3em;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+	border:1px solid #dedede !important;
+    margin: 10px 0;
+}
+
+#crumbs-bottom {
+    margin: 30px 0 10px 0;
+}
+
+#crumbs-top li, #crumbs-bottom li {
+	float:left;
+    line-height:2.3em;
+	color:#777;
+	padding-left:.75em;
+}		
+#crumbs-top li a, #crumbs-bottom li a {
+	background:url(Air/img/crumbs.gif) no-repeat right center;
+	display:block;
+	padding:0 15px 0 0;
+}							
+#crumbs-top li a:link,
+#crumbs-top li a:visited,
+#crumbs-bottom li a:link,
+#crumbs-bottom li a:visited {
+    text-decoration: none;   
 }
