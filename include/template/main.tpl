@@ -6,7 +6,7 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-2940689-10']);
+  _gaq.push(['_setAccount', 'UA-xxxxxxx-xx']); // Add Google Analytics ID here
   _gaq.push(['_trackPageview']);
 
   (function() {
