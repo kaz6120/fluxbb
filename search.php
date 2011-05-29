@@ -552,10 +552,10 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 ?>
 <div class="linkst">
 	<div class="inbox crumbsplus">
-		<ul class="crumbs">
+		<ul id="crumbs-top">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="search.php"><?php echo $crumbs_text['show_as'] ?></a></li>
-			<li><span>»&#160;</span><strong><?php echo $crumbs_text['search_type'] ?></strong></li>
+			<li><a href="search.php"><?php echo $crumbs_text['show_as'] ?></a></li>
+			<li><strong><?php echo $crumbs_text['search_type'] ?></strong></li>
 		</ul>
 		<div class="pagepost">
 			<p class="pagelink"><?php echo $paging_links ?></p>
@@ -753,10 +753,10 @@ if (isset($_GET['action']) || isset($_GET['search_id']))
 		<div class="pagepost">
 			<p class="pagelink"><?php echo $paging_links ?></p>
 		</div>
-		<ul class="crumbs">
+		<ul id="crumbs-bottom">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="search.php"><?php echo $crumbs_text['show_as'] ?></a></li>
-			<li><span>»&#160;</span><strong><?php echo $crumbs_text['search_type'] ?></strong></li>
+			<li><a href="search.php"><?php echo $crumbs_text['show_as'] ?></a></li>
+			<li><?php echo $crumbs_text['search_type'] ?></strong></li>
 		</ul>
 <?php echo (!empty($forum_actions) ? "\t\t".'<p class="subscribelink clearb">'.implode(' - ', $forum_actions).'</p>'."\n" : '') ?>
 		<div class="clearer"></div>
