@@ -8,7 +8,7 @@
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
-
+require PUN_ROOT.'include/ap_poll.php';
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
@@ -160,6 +160,10 @@ if (isset($_POST['form_sent']))
 
 	$now = time();
 
+	// AP Poll
+	ap_poll_form_validate($errors);
+	// /AP Poll
+
 	// Did everything go according to plan?
 	if (empty($errors) && !isset($_POST['preview']))
 	{
@@ -308,8 +312,12 @@ if (isset($_POST['form_sent']))
 			update_search_index('post', $new_pid, $message, $subject);
 
 			update_forum($fid);
+		
+		    // AP Poll
+		    ap_poll_save($new_tid);
+		    // /AP Poll
 
-			// Should we send out notifications?
+            // Should we send out notifications?
 			if ($pun_config['o_forum_subscriptions'] == '1')
 			{
 				// Get any subscribed users that should be notified (banned users are excluded)
@@ -702,6 +710,10 @@ if (!empty($checkboxes))
 ?>
 			</div>
 			<p class="buttons"><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="s" /> <input type="submit" name="preview" value="<?php echo $lang_post['Preview'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="p" /> <a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+            			<!-- AP Poll -->
+			<?php ap_poll_form_post($tid); ?>
+			<!-- /AP Poll -->
+
 		</form>
 	</div>
 </div>

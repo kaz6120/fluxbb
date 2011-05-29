@@ -142,6 +142,24 @@ function process_form(the_form)
 
 }
 
+if (defined('AP_POLL_MAX_CHOICES')) 
+{
+	?>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('#ap_poll_enabled').change(function() {
+			if (jQuery('#ap_poll_enabled').attr('checked')) {
+				jQuery('#ap_poll_input').show();
+			} else {
+				jQuery('#ap_poll_input').hide();
+			}
+		});
+	});
+	</script>
+	<?php
+}
+
 // JavaScript tricks for IE6 and older
 echo '<!--[if lte IE 6]><script type="text/javascript" src="style/imports/minmax.js"></script><![endif]-->'."\n";
 
@@ -226,6 +244,12 @@ $links[] = '<li id="navindex"'.((PUN_ACTIVE_PAGE == 'index') ? ' class="isactive
 
 if ($pun_user['g_read_board'] == '1' && $pun_user['g_view_users'] == '1')
 	$links[] = '<li id="navuserlist"'.((PUN_ACTIVE_PAGE == 'userlist') ? ' class="isactive"' : '').'><a href="userlist.php">'.$lang_common['User list'].'</a></li>';
+
+// Usermap by Gizzmo - START
+global $lang_usermap; // This is here to so $lang_usermap is accessable when message() is called
+if ($pun_user['g_view_users'] == '1' && $pun_user['g_um_view_map'] == '1')
+	$links[] = '<li id="navusermap'.((PUN_ACTIVE_PAGE == 'usermap') ? ' class="isactive"': '').'"><a href="usermap.php">'.$lang_usermap['User map'].'</a></li>';
+// Usermap by Gizzmo - END
 
 if ($pun_config['o_rules'] == '1' && (!$pun_user['is_guest'] || $pun_user['g_read_board'] == '1' || $pun_config['o_regs_allow'] == '1'))
 	$links[] = '<li id="navrules"'.((PUN_ACTIVE_PAGE == 'rules') ? ' class="isactive"' : '').'><a href="misc.php?action=rules">'.$lang_common['Rules'].'</a></li>';

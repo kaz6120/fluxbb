@@ -528,6 +528,13 @@ function generate_profile_menu($page = '')
 				<ul>
 					<li<?php if ($page == 'essentials') echo ' class="isactive"'; ?>><a href="profile.php?section=essentials&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section essentials'] ?></a></li>
 					<li<?php if ($page == 'personal') echo ' class="isactive"'; ?>><a href="profile.php?section=personal&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section personal'] ?></a></li>
+<?php
+// Usermap by Gizzmo - START
+	global $lang_usermap;
+	if ($pun_user['g_um_add_to_map'] == '1')
+		echo "\t\t\t\t\t".'<li'.($page == 'usermap'? ' class="isactive"': '').'><a href="profile.php?section=usermap&amp;id='.$id.'">'.$lang_usermap['User map'].'</a></li>'."\n";
+// Usermap by Gizzmo - END
+?>
 					<li<?php if ($page == 'messaging') echo ' class="isactive"'; ?>><a href="profile.php?section=messaging&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section messaging'] ?></a></li>
 <?php if ($pun_config['o_avatars'] == '1' || $pun_config['o_signatures'] == '1'): ?>					<li<?php if ($page == 'personality') echo ' class="isactive"'; ?>><a href="profile.php?section=personality&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section personality'] ?></a></li>
 <?php endif; ?>					<li<?php if ($page == 'display') echo ' class="isactive"'; ?>><a href="profile.php?section=display&amp;id=<?php echo $id ?>"><?php echo $lang_profile['Section display'] ?></a></li>
@@ -718,6 +725,11 @@ function delete_topic($topic_id)
 
 	// Delete any subscriptions for this topic
 	$db->query('DELETE FROM '.$db->prefix.'topic_subscriptions WHERE topic_id='.$topic_id) or error('Unable to delete subscriptions', __FILE__, __LINE__, $db->error());
+
+	// AP Poll
+	require PUN_ROOT.'include/ap_poll.php';
+	ap_poll_delete($topic_id);
+	// /AP Poll
 
 	// Delete any thanks for this post
 	$db->query('DELETE FROM '.$db->prefix.'thanks WHERE topic_id='.$topic_id) or error('Unable to delete thanks', __FILE__, __LINE__, $db->error());

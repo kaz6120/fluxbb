@@ -8,7 +8,7 @@
 
 define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
-
+require PUN_ROOT.'include/ap_poll.php';
 
 if ($pun_user['g_read_board'] == '0')
 	message($lang_common['No view']);
@@ -72,6 +72,10 @@ if (isset($_POST['form_sent']))
 			$errors[] = $lang_post['Too long subject'];
 		else if ($pun_config['p_subject_all_caps'] == '0' && is_all_uppercase($subject) && !$pun_user['is_admmod'])
 			$errors[] = $lang_post['All caps subject'];
+	
+		// AP Poll
+		ap_poll_form_validate($errors);
+		// /AP Poll
 	}
 
 	// Clean up message from POST
@@ -120,6 +124,10 @@ if (isset($_POST['form_sent']))
 		{
 			// Update the topic and any redirect topics
 			$db->query('UPDATE '.$db->prefix.'topics SET subject=\''.$db->escape($subject).'\', sticky='.$stick_topic.' WHERE id='.$cur_post['tid'].' OR moved_to='.$cur_post['tid']) or error('Unable to update topic', __FILE__, __LINE__, $db->error());
+
+			// AP Poll
+			ap_poll_save($cur_post['tid']);
+			// /AP Poll
 
 			// We changed the subject, so we need to take that into account when we update the search words
 			update_search_index('edit', $id, $message, $subject);
@@ -286,6 +294,9 @@ if (!empty($checkboxes))
 ?>
 			</div>
 			<p class="buttons"><input type="submit" name="submit" value="<?php echo $lang_common['Submit'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="s" /> <input type="submit" name="preview" value="<?php echo $lang_post['Preview'] ?>" tabindex="<?php echo $cur_index++ ?>" accesskey="p" /> <a href="javascript:history.go(-1)"><?php echo $lang_common['Go back'] ?></a></p>
+			<!-- AP Poll -->
+			<?php if ($can_edit_subject) ap_poll_form_edit($cur_post['tid']); ?>
+			<!-- /AP Poll -->
 		</form>
 	</div>
 </div>

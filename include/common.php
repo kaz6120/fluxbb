@@ -194,3 +194,9 @@ if (!defined('PUN_SEARCH_MAX_WORD'))
 
 if (!defined('FORUM_MAX_COOKIE_SIZE'))
 	define('FORUM_MAX_COOKIE_SIZE', 4048);
+
+// Usermap by Gizzmo - START
+// Require things like functions or language files
+require PUN_ROOT.'usermap/include.php';
+// Usermap by Gizzmo - END
+

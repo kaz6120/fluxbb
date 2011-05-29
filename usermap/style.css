@@ -1,0 +1,45 @@
+/**
+ * Copyright (C) 2010 Justgizzmo.com
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
+#user_map_canvas {
+	margin-bottom:19px;
+}
+
+/* make the userlist scroll: height is set in the JS*/
+#punusermap #usermap_userlist .box {
+	overflow:auto;
+}
+
+/* userlist */
+#punusermap #usermap_userlist li a {
+	padding: 6px 0 6px 24px;
+	background-repeat:no-repeat;
+	background-position:left center;
+}
+
+/* admin option. align the icon correctly */
+#um_icon {
+	vertical-align:text-bottom;
+}
+
+/* the info window */
+#infoWindow dl {
+	border-style: solid none none none;
+	border-width: 1px;
+	border-color: #dfe6ee;
+	margin: 7px 0;
+	padding: 0;
+}
+#infoWindow dt {
+	padding: 5px 0;
+	float:left;
+	width: 8em;
+}
+#infoWindow dd {
+	border-style: none none solid none;
+	border-width: 1px;
+	border-color: #dfe6ee;
+	padding: 5px 0 5px 8em;
+}

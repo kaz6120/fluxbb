@@ -266,6 +266,23 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
     padding: 10px 0;
 }
 
+/* Image Header Sample
+-------------------------*/
+/*#brdtitle h1 {*/
+    /*padding: 0;*/
+    /*[>background: #44699c url(./Air/img/japan-militaire-forum.png) no-repeat;<]*/
+    /*background: #44699c url(./Air/img/japan-militaire-forum-2011-05.png) no-repeat;*/
+    /*height: 100px;*/
+    /*text-indent: -9999em;*/
+/*}*/
+
+/*#brddesc {*/
+    /*border-top-style: solid;*/
+    /*border-top-width: 10px;*/
+    /*padding: 10px 0;*/
+/*}*/
+/*-----------------------*/
+
 #brddesc p {
 	padding: 0;
 }
@@ -1709,3 +1726,65 @@ html, body, .pun {
 #crumbs-bottom li a:visited {
     text-decoration: none;   
 }
+
+/* Simple Poll 
+--------------------------------------------------------------------*/
+/* Poll */
+#ap_poll_input {
+}
+
+.ap_poll_hidden { display: none; }
+
+fieldset.ap_poll {
+	margin-top: 2em;
+	padding: 1em;
+	background-color: #F6F9FC;
+	border: 1px solid #DFE6EE;
+}
+
+.ap_poll legend {
+	font-weight: normal;
+}
+
+.ap_poll p {
+	font-weight: bold;
+}
+
+.ap_poll table {
+	width: auto;
+}
+
+.ap_poll th {
+	font-weight: normal;
+	padding: .5em 1em .5em 0;
+}
+
+.ap_poll td {
+	padding: .5em 1em;
+}
+
+.ap_poll label {
+	
+}
+
+.ap_poll .percent {
+	text-align: right;
+}
+
+.ap_poll .results .bar {
+	height: 20px;
+	background-color: #44699C;
+}
+
+.ap_poll .results .bar .top {
+	background-color: #4F78B2;
+	width: 100%;
+	height: 10px;
+}
+
+.ap_poll .total {
+	color: #b7b7b7;
+	margin-top: .5em;
+	font-style: italic;
+}
+
