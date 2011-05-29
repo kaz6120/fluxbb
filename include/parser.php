@@ -161,7 +161,7 @@ function strip_empty_bbcode($text, &$errors)
 
 	// Remove empty tags
 	//while (($new_text = preg_replace('/\[(b|u|s|ins|del|em|i|h|colou?r|quote|img|url|email|list)(?:\=[^\]]*)?\]\s*\[\/\1\]/', '', $text)) !== NULL)
-    while (($new_text = preg_replace('/\[(b|u|s|ins|del|em|i|h|colou?r|quote|img|url|email|list|acronym|q|sup|sub|left|right|center|justify|video)(?:\=[^\]]*)?\]\[\/\1\]/', '', $text)) !== false)
+    while (($new_text = preg_replace('/\[(b|u|s|ins|del|em|i|h|colou?r|quote|img|flash|url|email|list|acronym|q|sup|sub|left|right|center|justify|video)(?:\=[^\]]*)?\]\[\/\1\]/', '', $text)) !== false)
 
 	{
 		if ($new_text != $text)
@@ -208,7 +208,7 @@ function preparse_tags($text, &$errors, $is_signature = false)
 	// Start off by making some arrays of bbcode tags and what we need to do with each one
 
 	// List of all the tags
-	$tags = array('quote', 'code', 'b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'url', 'email', 'img', 'list', '*', 'h', 'acronym', 'q', 'sup', 'sub', 'left', 'right', 'center', 'justify', 'video');
+	$tags = array('quote', 'code', 'b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'url', 'email', 'img', 'flash', 'list', '*', 'h', 'acronym', 'q', 'sup', 'sub', 'left', 'right', 'center', 'justify', 'video');
 	// List of tags that we need to check are open (You could not put b,i,u in here then illegal nesting like [b][i][/b][/i] would be allowed)
 	$tags_opened = $tags;
 	// and tags we need to check are closed (the same as above, added it just in case)
@@ -224,13 +224,13 @@ function preparse_tags($text, &$errors, $is_signature = false)
 	// Tags we trim interior space
 	$tags_trim = array('img', 'video');
 	// Tags we remove quotes from the argument
-	$tags_quotes = array('url', 'email', 'img', 'video');
+	$tags_quotes = array('url', 'email', 'img', 'flash', 'video');
 	// Tags we limit bbcode in
 	$tags_limit_bbcode = array(
-		'*' 	=> array('b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'url', 'email', 'list', 'img', 'code', 'acronym', 'q', 'sup', 'sub', 'video'),
+		'*' 	=> array('b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'url', 'email', 'list', 'img', 'code', 'acronym', 'q', 'sup', 'sub', 'video', 'flash'),
 		'list' 	=> array('*'),
-		'url' 	=> array('b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'img', 'acronym', 'q', 'sup', 'sub'),
-		'email' => array('b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'img', 'acronym', 'q', 'sup', 'sub'),
+		'url' 	=> array('b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'img', 'acronym', 'q', 'sup', 'sub', 'flash'),
+		'email' => array('b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'img', 'acronym', 'q', 'sup', 'sub', 'flash'),
 		'img' 	=> array(),
 		'h'		=> array('b', 'i', 'u', 's', 'ins', 'del', 'em', 'color', 'colour', 'url', 'email'),
 		'video'  => array()
@@ -688,6 +688,33 @@ function handle_img_tag($url, $is_signature = false, $alt = null)
 	return $img_tag;
 }
 
+//
+// Turns an URL from the [flash] tag into an <object> tag
+//
+function handle_flash_tag($url, $is_signature = false, $attr = null)
+{
+	global $lang_post, $pun_user;
+	
+	$size = explode(',', $attr);
+	if (count($size) != 2)
+		$attr = null;
+	else
+	{
+		$width = intval($size[0]); $height = intval($size[1]);
+		if ($width < 1 || $height <1) $attr = null;
+	}
+	
+	if (!$is_signature)
+	{
+		if ($attr == null) 
+			$flash_tag = $lang_post['Flash error'];
+		else
+			$flash_tag = '<span class="postimg"><object classid="clsid:D27CDB6E-AE6D-11CF-96B8-444553540000" codebase="http://active.macromedia.com/flash2/cabs/swflash.cab#version=5,0,0,0" width="'.$width.'" height="'.$height.'"><param name="movie" value="'.$url.'"><param name="play" value="false"><param name="loop" value="false"><param name="quality" value="high"><param name="allowScriptAccess" value="never"><param name="allowNetworking" value="internal"><embed src="'.$url.'" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" play="false" loop="false" quality="high" allowscriptaccess="never" allownetworking="internal" width="'.$width.'" height="'.$height.'"></object></span>';
+	}
+		
+	return $flash_tag;
+}
+
 
 //
 // Parse the contents of [list] bbcode
@@ -747,6 +774,7 @@ function do_bbcode($text, $is_signature = false)
 	$pattern[] = '#\[em\](.*?)\[/em\]#ms';
 	$pattern[] = '#\[colou?r=([a-zA-Z]{3,20}|\#[0-9a-fA-F]{6}|\#[0-9a-fA-F]{3})](.*?)\[/colou?r\]#ms';
 	$pattern[] = '#\[h\](.*?)\[/h\]#ms';
+    $pattern[] = '#\[youtube\]([-\w]{11})\[/youtube\]#';
 	$pattern[] = '#\[acronym\](.*?)\[/acronym\]#ms';
 	$pattern[] = '#\[acronym=(.*?)\](.*?)\[/acronym\]#ms';
 	$pattern[] = '#\[q\](.*?)\[/q\]#ms';
@@ -770,6 +798,7 @@ function do_bbcode($text, $is_signature = false)
 	$replace[] = '<em>$1</em>';
 	$replace[] = '<span style="color: $1">$2</span>';
 	$replace[] = '</p><h5>$1</h5><p>';
+    $replace[] = '<iframe width="480" height="390" src="http://www.youtube.com/embed/$1?rel=0" frameborder="0"></iframe>';
 	$replace[] = '<acronym>$1</acronym>';
 	$replace[] = '<acronym title="$1">$2</acronym>';
 	$replace[] = '<q>$1</q>';
@@ -799,6 +828,20 @@ function do_bbcode($text, $is_signature = false)
 			$replace[] = 'handle_img_tag(\'$1$3\', false)';
 			$replace[] = 'handle_img_tag(\'$2$4\', false, \'$1\')';
 		}
+
+		$pattern[] = '#\[flash\]((ht|f)tps?://)([^\s<"]*?)\[/flash\]#e';
+		$pattern[] = '#\[flash=([^\[]*?)\]((ht|f)tps?://)([^\s<"]*?)\[/flash\]#e';
+		if ($is_signature)
+		{
+			$replace[] = 'handle_flash_tag(\'$1$3\', true)';
+			$replace[] = 'handle_flash_tag(\'$2$4\', true, \'$1\')';
+		}
+		else
+		{
+			$replace[] = 'handle_flash_tag(\'$1$3\', false)';
+			$replace[] = 'handle_flash_tag(\'$2$4\', false, \'$1\')';
+		}
+
 	}
 
 	$pattern[] = '#\[url\]([^\[]*?)\[/url\]#e';
@@ -825,8 +868,12 @@ function do_clickable($text)
 {
 	$text = ' '.$text;
 
-	$text = ucp_preg_replace('#(?<=[\s\]\)])(<)?(\[)?(\()?([\'"]?)(https?|ftp|news){1}://([\p{L}\p{N}\-]+\.([\p{L}\p{N}\-]+\.)*[\p{L}\p{N}]+(:[0-9]+)?(/[^\s\[]*[^\s.,?!\[;:-])?)\4(?(3)(\)))(?(2)(\]))(?(1)(>))(?![^\s]*\[/(?:url|img)\])#uie', 'stripslashes(\'$1$2$3$4\').handle_url_tag(\'$5://$6\', \'$5://$6\', true).stripslashes(\'$4$10$11$12\')', $text);
-	$text = ucp_preg_replace('#(?<=[\s\]\)])(<)?(\[)?(\()?([\'"]?)(www|ftp)\.(([\p{L}\p{N}\-]+\.)*[\p{L}\p{N}]+(:[0-9]+)?(/[^\s\[]*[^\s.,?!\[;:-])?)\4(?(3)(\)))(?(2)(\]))(?(1)(>))(?![^\s]*\[/(?:url|img)\])#uie', 'stripslashes(\'$1$2$3$4\').handle_url_tag(\'$5.$6\', \'$5.$6\', true).stripslashes(\'$4$10$11$12\')', $text);
+	//$text = ucp_preg_replace('#(?<=[\s\]\)])(<)?(\[)?(\()?([\'"]?)(https?|ftp|news){1}://([\p{L}\p{N}\-]+\.([\p{L}\p{N}\-]+\.)*[\p{L}\p{N}]+(:[0-9]+)?(/[^\s\[]*[^\s.,?!\[;:-])?)\4(?(3)(\)))(?(2)(\]))(?(1)(>))(?![^\s]*\[/(?:url|img)\])#uie', 'stripslashes(\'$1$2$3$4\').handle_url_tag(\'$5://$6\', \'$5://$6\', true).stripslashes(\'$4$10$11$12\')', $text);
+	//$text = ucp_preg_replace('#(?<=[\s\]\)])(<)?(\[)?(\()?([\'"]?)(www|ftp)\.(([\p{L}\p{N}\-]+\.)*[\p{L}\p{N}]+(:[0-9]+)?(/[^\s\[]*[^\s.,?!\[;:-])?)\4(?(3)(\)))(?(2)(\]))(?(1)(>))(?![^\s]*\[/(?:url|img)\])#uie', 'stripslashes(\'$1$2$3$4\').handle_url_tag(\'$5.$6\', \'$5.$6\', true).stripslashes(\'$4$10$11$12\')', $text);
+
+	$text = ucp_preg_replace('#(?<=[\s\]\)])(<)?(\[)?(\()?([\'"]?)(https?|ftp|news){1}://([\p{L}\p{N}\-]+\.([\p{L}\p{N}\-]+\.)*[\p{L}\p{N}]+(:[0-9]+)?(/[^\s\[]*[^\s.,?!\[;:-])?)\4(?(3)(\)))(?(2)(\]))(?(1)(>))(?![^\s]*\[/(?:url|img|flash)\])#uie', 'stripslashes(\'$1$2$3$4\').handle_url_tag(\'$5://$6\', \'$5://$6\', true).stripslashes(\'$4$10$11$12\')', $text);
+	$text = ucp_preg_replace('#(?<=[\s\]\)])(<)?(\[)?(\()?([\'"]?)(www|ftp)\.(([\p{L}\p{N}\-]+\.)*[\p{L}\p{N}]+(:[0-9]+)?(/[^\s\[]*[^\s.,?!\[;:-])?)\4(?(3)(\)))(?(2)(\]))(?(1)(>))(?![^\s]*\[/(?:url|img|flash)\])#uie', 'stripslashes(\'$1$2$3$4\').handle_url_tag(\'$5.$6\', \'$5.$6\', true).stripslashes(\'$4$10$11$12\')', $text);
+	
 
 	return substr($text, 1);
 }

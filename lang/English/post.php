@@ -29,6 +29,7 @@ $lang_post = array(
 'Flood start'		=>	'At least',
 'flood end'			=>	'seconds have to pass between posts. Please wait a little while and try posting again.',
 'Preview'			=>	'Preview', // submit button to preview message
+'Flash error'		=>	'Correct FLASH BBCODE: [flash=width,height]URL of your SWF file[/flash]',
 
 // Edit post
 'Edit post legend'	=>	'Edit the post and submit changes',

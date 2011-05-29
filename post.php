@@ -457,6 +457,10 @@ if ($tid)
 		// Remove [img] tags from quoted message
 		$q_message = preg_replace('%\[img(?:=(?:[^\[]*?))?\]((ht|f)tps?://)([^\s<"]*?)\[/img\]%U', '\1\3', $q_message);
 
+        // Add YouTube support
+        $q_message = preg_replace('%\[flash(?:=(?:[^\[]*?))?\]((ht|f)tps?://)([^\s<"]*?)\[/flash\]%U', '\1\3', $q_message);
+
+
 		// If we split up the message before we have to concatenate it together again (code tags)
 		if (isset($inside))
 		{
