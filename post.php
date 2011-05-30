@@ -466,7 +466,7 @@ if ($tid)
 		$q_message = preg_replace('%\[img(?:=(?:[^\[]*?))?\]((ht|f)tps?://)([^\s<"]*?)\[/img\]%U', '\1\3', $q_message);
 
         // Add YouTube support
-        $q_message = preg_replace('%\[flash(?:=(?:[^\[]*?))?\]((ht|f)tps?://)([^\s<"]*?)\[/flash\]%U', '\1\3', $q_message);
+        // $q_message = preg_replace('%\[flash(?:=(?:[^\[]*?))?\]((ht|f)tps?://)([^\s<"]*?)\[/flash\]%U', '\1\3', $q_message);
 
 
 		// If we split up the message before we have to concatenate it together again (code tags)
@@ -547,11 +547,11 @@ require PUN_ROOT.'header.php';
 ?>
 <div class="linkst">
 	<div class="inbox">
-		<ul class="crumbs">
+		<ul id="crumbs-top">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_posting['id'] ?>"><?php echo pun_htmlspecialchars($cur_posting['forum_name']) ?></a></li>
-<?php if (isset($cur_posting['subject'])): ?>			<li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $tid ?>"><?php echo pun_htmlspecialchars($cur_posting['subject']) ?></a></li>
-<?php endif; ?>			<li><span>»&#160;</span><strong><?php echo $action ?></strong></li>
+			<li><a href="viewforum.php?id=<?php echo $cur_posting['id'] ?>"><?php echo pun_htmlspecialchars($cur_posting['forum_name']) ?></a></li>
+<?php if (isset($cur_posting['subject'])): ?>			<li><a href="viewtopic.php?id=<?php echo $tid ?>"><?php echo pun_htmlspecialchars($cur_posting['subject']) ?></a></li>
+<?php endif; ?>			<li><strong><?php echo $action ?></strong></li>
 		</ul>
 	</div>
 </div>

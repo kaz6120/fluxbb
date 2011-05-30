@@ -27,7 +27,6 @@ $lang_post = array(
 'Flood start'		=>	'前の投稿から少なくとも',
 'flood end'			=>	'秒は間を開けて投稿してください。少し待ってから試行してください。',
 'Preview'			=>	'プレビュー', // submit button to preview message
-'Flash error'		=>	'FLASH BBCODEの編集: [flash=width,height]SWFファイルのURL[/flash]',
 
 // Edit post
 'Edit post legend'	=>	'投稿を編集して送信ボタンを押してください。',
