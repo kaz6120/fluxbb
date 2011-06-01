@@ -194,11 +194,11 @@ $action = ((isset($_REQUEST['action']) && ($_REQUEST['action'] == 'delete')) ? $
 		?>
 <div class="linkst">
 	<div class="inbox crumbsplus">
-		<ul class="crumbs">
+		<ul id="crumbs-top">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
-			<li><span>»&#160;</span><a href="pms_inbox.php"><?php echo $lang_pms['Inbox'] ?></a></li>
-			<li><span>»&#160;</span><?php echo $lang_pms['Delete message'] ?></li>
+			<li><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
+			<li><a href="pms_inbox.php"><?php echo $lang_pms['Inbox'] ?></a></li>
+			<li><?php echo $lang_pms['Delete message'] ?></li>
 		</ul>
 		<div class="pagepost"></div>
 		<div class="clearer"></div>
@@ -318,12 +318,12 @@ $reply_link = '<p class="postlink conr"><a href="pms_send.php?reply='.$tid.'">'.
 ?>
 <div class="linkst">
 	<div class="inbox crumbsplus">
-		<ul class="crumbs">
+		<ul id="crumbs-top">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
-			<li><span>»&#160;</span><a href="pms_inbox.php"><?php echo $lang_pms['Inbox'] ?></a></li>
-			<li><span>»&#160;</span><a href="#block"><?php echo $lang_pms['View'] ?></a></li>
-			<li><span>»&#160;</span><?php echo $messageh2 ?></li>
+			<li><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
+			<li><a href="pms_inbox.php"><?php echo $lang_pms['Inbox'] ?></a></li>
+			<li><a href="#block"><?php echo $lang_pms['View'] ?></a></li>
+			<li><?php echo $messageh2 ?></li>
 		</ul>
 		<div class="pagepost"></div>
 		<div class="clearer"></div>

@@ -155,11 +155,11 @@ $cur_index = 1;
 ?>
 <div class="linkst">
 	<div class="inbox">
-		<ul class="crumbs">
+		<ul id="crumbs-top">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="viewforum.php?id=<?php echo $cur_post['fid'] ?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li>
-			<li><span>»&#160;</span><a href="viewtopic.php?id=<?php echo $cur_post['tid'] ?>"><?php echo pun_htmlspecialchars($cur_post['subject']) ?></a></li>
-			<li><span>»&#160;</span><strong><?php echo $lang_post['Edit post'] ?></strong></li>
+			<li><a href="viewforum.php?id=<?php echo $cur_post['fid'] ?>"><?php echo pun_htmlspecialchars($cur_post['forum_name']) ?></a></li>
+			<li><a href="viewtopic.php?id=<?php echo $cur_post['tid'] ?>"><?php echo pun_htmlspecialchars($cur_post['subject']) ?></a></li>
+			<li><strong><?php echo $lang_post['Edit post'] ?></strong></li>
 		</ul>
 	</div>
 </div>

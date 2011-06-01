@@ -103,10 +103,10 @@ if ($action != '')
 	?>
 <div class="linkst">
 	<div class="inbox crumbsplus">
-		<ul class="crumbs">
+		<ul id="crumbs-top">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
-			<li><span>»&#160;</span><strong><?php echo $lang_pms['Multidelete'] ?></strong></li>
+			<li><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
+			<li><strong><?php echo $lang_pms['Multidelete'] ?></strong></li>
 		</ul>
 		<div class="pagepost"></div>
 		<div class="clearer"></div>
@@ -167,10 +167,10 @@ require PUN_ROOT.'header.php';
 ?>
 <div class="linkst">
 	<div class="inbox crumbsplus">
-		<ul class="crumbs">
+		<ul id="crumbs-top">
 			<li><a href="index.php"><?php echo $lang_common['Index'] ?></a></li>
-			<li><span>»&#160;</span><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
-			<li><span>»&#160;</span><strong><?php echo $lang_pms['Inbox'] ?></strong></li>
+			<li><a href="pms_inbox.php"><?php echo $lang_pms['Private Messages'] ?></a></li>
+			<li><strong><?php echo $lang_pms['Inbox'] ?></strong></li>
 		</ul>
 		<div class="pagepost"></div>
 		<div class="clearer"></div>
