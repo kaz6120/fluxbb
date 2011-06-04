@@ -59,13 +59,12 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
 }
 
 .pun h2, .pun .hd d2 {
-	font: 1.462em/1em "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font: bold 1.4em/1em "Trebuchet MS", Arial, Helvetica, sans-serif;
 	padding: 7px 0;
 }
 
 .pun h3 {
-	font-size: 1.154em;
-	line-height: 1.267em;
+	font: bold 1.154em/1.267em "Trebuchet MS", Arial, Helvetica, sans-serif;
 	padding: 7px 0;
 }
 
@@ -340,6 +339,10 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
 #brdwelcome .conl li:first-child span {
 	padding-left: 0;
 	background: none;
+}
+
+#brdwelcome .conl li a {
+    color:  #af2c00; 
 }
 
 /* Stats
@@ -899,8 +902,9 @@ MAIN POSTS
 
 .pun .usercontent h1, .pun .usercontent h2, .pun .usercontent h3,
 .pun .usercontent h4, .pun .usercontent h5, .pun .usercontent h6 {
-	padding: 7px 0 0 0;
+	padding: 7px 0;
 }
+
 
 .pun .postmsg h5, #punhelp h5 {
 	font-size: 1.231em;
@@ -1643,7 +1647,7 @@ html, body, .pun {
 
 .pun .inew .icon {
 	/*border-color: #91b3d9 #87a8d1 #6c85bb #7292c3;*/
-        border-color: #c23000 #af2c00 #992600 #ac2b00;
+    border-color: #c23000 #af2c00 #992600 #ac2b00;
 
 }
 
