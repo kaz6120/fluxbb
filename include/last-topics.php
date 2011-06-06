@@ -24,11 +24,11 @@ else
     }   
 	elseif ($pun_user['is_guest'])
 	{
-		$result = $db->query('SELECT t.id, t.poster, t.subject, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.num_views, t.moved_to, t.forum_id, t.sticky FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id=3) WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL ORDER BY t.sticky DESC t.last_post DESC LIMIT '.$show) or error('Unable to get the guest\'s topic list', __FILE__, __LINE__, $db->error());
+		$result = $db->query('SELECT t.id, t.poster, t.subject, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.num_views, t.moved_to, t.forum_id, t.sticky FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id=3) WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL ORDER BY t.sticky DESC, t.last_post DESC LIMIT '.$show) or error('Unable to get the guest\'s topic list', __FILE__, __LINE__, $db->error());
 	}
     else
     {
-		$result = $db->query('SELECT t.id, t.poster, t.subject, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.num_views, t.moved_to, t.forum_id, t.sticky FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL ORDER BY t.last_post DESC LIMIT '.$show) or error('Unable to get the member\'s topic list', __FILE__, __LINE__, $db->error());
+		$result = $db->query('SELECT t.id, t.poster, t.subject, t.posted, t.last_post, t.last_post_id, t.last_poster, t.num_replies, t.num_views, t.moved_to, t.forum_id, t.sticky FROM '.$db->prefix.'topics AS t INNER JOIN '.$db->prefix.'forums AS f ON f.id=t.forum_id LEFT JOIN '.$db->prefix.'forum_perms AS fp ON (fp.forum_id=f.id AND fp.group_id='.$pun_user['g_id'].') WHERE (fp.read_forum IS NULL OR fp.read_forum=1) AND t.moved_to IS NULL ORDER BY t.sticky DESC, t.last_post DESC LIMIT '.$show) or error('Unable to get the member\'s topic list', __FILE__, __LINE__, $db->error());
     }
 	?>			
  <div id="idx1" class="blocktable">
