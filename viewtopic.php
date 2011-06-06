@@ -426,6 +426,67 @@ $users_thanks2 = array();
 		}
 	}
 
+	// Default Avatar by Gizzmo - Start
+	if ($cur_post['poster_id'] > 1)
+	{
+		if ($user_avatar == '' && $pun_config['o_avatars'] == '1' && $pun_user['show_avatars'] != '0')
+		{
+			// was the default memeber avatar previosly found
+			if (!isset($default_member_avatar))
+			{
+				// start with using the provided avatar
+				$default_member_avatar = '<img src="'.$pun_config['o_base_url'].'/misc.php?gizz_default_avatar_img=1" width="64" height="64" alt="" />';
+
+				// then look for a uploaded avatar
+				foreach (array('jpg', 'gif', 'png') as $cur_type)
+				{
+					$path = $pun_config['o_avatars_dir'].'/member.'.$cur_type;
+
+					if (file_exists(PUN_ROOT.$path) && $img_size = @getimagesize(PUN_ROOT.$path))
+					{
+						$default_member_avatar = '<img src="'.$pun_config['o_base_url'].'/'.$path.'" '.$img_size[3].' alt="" />';
+						break;
+					}
+				}
+			}
+
+			// Set and cache $user_avatar with the default member avatar
+			$user_avatar = $user_avatar_cache[$cur_post['poster_id']] = $default_member_avatar;
+		}
+	}
+	else
+	{
+		// check and cache if the 'noguest' file exists
+		if (!isset($use_guest_avatar))
+			$use_guest_avatar = !file_exists($pun_config['o_avatars_dir'].'/noguest');
+
+		if ($use_guest_avatar && $pun_config['o_avatars'] == '1' && $pun_user['show_avatars'] != '0')
+		{
+			// was the guest avatar previosly found
+			if (!isset($default_guest_avatar))
+			{
+				// start with using the provided avatar
+				$default_guest_avatar = '<img src="'.$pun_config['o_base_url'].'/misc.php?gizz_default_avatar_img=2" width="64" height="64" alt="" />';
+
+				// then look for a uploaded avatar
+				foreach (array('jpg', 'gif', 'png') as $cur_type)
+				{
+					$path = $pun_config['o_avatars_dir'].'/guest.'.$cur_type;
+
+					if (file_exists(PUN_ROOT.$path) && $img_size = @getimagesize(PUN_ROOT.$path))
+					{
+						$default_guest_avatar = '<img src="'.$pun_config['o_base_url'].'/'.$path.'" '.$img_size[3].' alt="" />';
+						break;
+					}
+				}
+			}
+
+			// Set $user_avatar with the default guest avatar
+			$user_avatar = $default_guest_avatar;
+		}
+	}
+	// Default Avatar by Gizzmo - END
+
 ?>
 <div id="p<?php echo $cur_post['id'] ?>" class="blockpost<?php echo ($post_count % 2 == 0) ? ' roweven' : ' rowodd' ?><?php if ($cur_post['id'] == $cur_topic['first_post_id']) echo ' firstpost'; ?><?php if ($post_count == 1) echo ' blockpost1'; ?>">
  <h2><span><span class="conr">#<?php echo ($start_from + $post_count) ?></span> <a href="viewtopic.php?pid=<?php echo $cur_post['id'].'#p'.$cur_post['id'] ?>"><?php echo format_time($cur_post['posted']) ?></a></span></h2>
