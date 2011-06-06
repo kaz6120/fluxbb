@@ -45,7 +45,7 @@ define('PUN_ALLOW_INDEX', 1);
 define('PUN_ACTIVE_PAGE', 'index');
 require PUN_ROOT.'header.php';
 
-$show = '20'; // Change 5 by the number of topics you want the mod to display
+$show = '21'; // Change 5 by the number of topics you want the mod to display
 require PUN_ROOT.'include/last-topics.php';
 
 // Print the categories and forums

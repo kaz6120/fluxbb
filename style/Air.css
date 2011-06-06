@@ -265,6 +265,10 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
     padding: 10px 0;
 }
 
+#brddesc p {
+    padding: 0;
+}
+
 /* Image Header Sample
 -------------------------*/
 /*#brdtitle h1 {*/
@@ -279,12 +283,14 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
     /*border-top-style: solid;*/
     /*border-top-width: 10px;*/
     /*padding: 10px 0;*/
+    /*background: #ffffff url(./Air/img/applications-internet.png) center left no-repeat;*/
 /*}*/
-/*-----------------------*/
 
-#brddesc p {
-	padding: 0;
-}
+/*#brddesc p {*/
+	/*padding: 0 40px;*/
+/*}*/
+
+/*-----------------------*/
 
 #brdmenu ul {
 	padding: 0;
@@ -1792,3 +1798,7 @@ fieldset.ap_poll {
 	font-style: italic;
 }
 
+.stickytext {
+    padding-left: 20px;
+    background: url(Air/img/dialog-information.png) center left no-repeat;
+}
