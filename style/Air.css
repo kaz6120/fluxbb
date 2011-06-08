@@ -283,7 +283,8 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
     /*border-top-style: solid;*/
     /*border-top-width: 10px;*/
     /*padding: 10px 0;*/
-    /*background: #ffffff url(./Air/img/applications-internet.png) center left no-repeat;*/
+    /*[>background: #ffffff url(./Air/img/globe.png) center left no-repeat;<]*/
+    /*background: #ffffff url(./Air/img/discussion-32-3.png) center left no-repeat;*/
 /*}*/
 
 /*#brddesc p {*/
@@ -291,6 +292,7 @@ html, body, .pun table, .pun div, .pun form, .pun p, .pun h1, .pun h2, .pun h3, 
 /*}*/
 
 /*-----------------------*/
+
 
 #brdmenu ul {
 	padding: 0;
@@ -1690,11 +1692,41 @@ html, body, .pun {
      background: url(Air/img/info.png) center left no-repeat;
 }
 
-#idx1 h2 {
-    background: url(Air/img/label_new_green-30x30.png) center left no-repeat !important;
-} #idx1 h2 span {
-    padding-left: 30px;
-}
+/*#idx1 h2 {*/
+    /*background: url(Air/img/label_new_green-30x30.png) center left no-repeat !important;*/
+/*} #idx1 h2 span {*/
+    /*padding-left: 30px;*/
+/*}*/
+
+/*#idx2 h2 {*/
+    /*background: url(Air/img/thumb-historical-figure.png) center left no-repeat !important;*/
+/*} #idx2 h2 span {*/
+    /*padding-left: 47px;*/
+/*}*/
+
+/*#idx3 h2 {*/
+    /*background: url(Air/img/thumb-afv.png) center left no-repeat !important;*/
+/*} #idx3 h2 span {*/
+    /*padding-left: 47px;*/
+/*}*/
+
+/*#idx4 h2 {*/
+    /*background: url(Air/img/thumb-realscale.png) center left no-repeat !important;*/
+/*} #idx4 h2 span {*/
+    /*padding-left: 47px;*/
+/*}*/
+
+/*#idx5 h2 {*/
+    /*background: url(Air/img/thumb-general-talk.png) center left no-repeat !important;*/
+/*} #idx5 h2 span {*/
+    /*padding-left: 47px;*/
+/*}*/
+
+/*#idx6 h2 {*/
+    /*background: url(Air/img/thumb-others.png) center left no-repeat !important;*/
+/*} #idx6 h2 span {*/
+    /*padding-left: 47px;*/
+/*}*/
 
 #online-users {
     padding:7px;
@@ -1800,5 +1832,7 @@ fieldset.ap_poll {
 
 .stickytext {
     padding-left: 20px;
-    background: url(Air/img/dialog-information.png) center left no-repeat;
+    /*background: url(Air/img/dialog-information.png) center left no-repeat;*/
+    background: url(Air/img/sticky-1.png) center left no-repeat;
 }
+
